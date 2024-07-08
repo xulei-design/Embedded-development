@@ -1,0 +1,59 @@
+C51 COMPILER V9.54   MAIN                                                                  04/18/2023 11:19:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "LCD1602.h"
+   3          #include"delay.h"
+   4          #include <string.h>
+   5          
+   6          
+   7          void main()
+   8          {
+   9   1          unsigned char i;
+  10   1          unsigned char str[] = "hell0 LCD1602";
+  11   1          unsigned char str1[] = "welcome to study LCD1602";
+  12   1          LCDInit();
+  13   1          delayxms(10);
+  14   1          //LCDWriteCmd(LCD_DIS_MODE_LEFT); //初始设置的是字符的输入模式 整屏左移
+  15   1          LCDWriteCmd(0x80);
+  16   1              for(i=0;i<strlen(str);i++)
+  17   1              {
+  18   2                  LCDWriteData(str[i]);
+  19   2                  //delayxms(200);
+  20   2              }
+  21   1      
+  22   1              LCDWriteCmd(0xC0);
+  23   1              for(i=0;i<strlen(str1);i++)
+  24   1              {
+  25   2                  LCDWriteData(str1[i]); //显示
+  26   2                  //delayxms(2000);
+  27   2              }
+  28   1          
+  29   1          while(1)
+  30   1          {
+  31   2              LCDWriteCmd(0x18);
+  32   2              delayxms(1000);
+  33   2              
+  34   2          }
+  35   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    140    ----
+   CONSTANT SIZE    =     39    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      40
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

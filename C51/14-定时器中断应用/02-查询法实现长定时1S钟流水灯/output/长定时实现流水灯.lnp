@@ -1,0 +1,3 @@
+"..\output\main.obj" 
+TO "..\output\长定时实现流水灯" 
+PRINT("..\listing\长定时实现流水灯.m51")

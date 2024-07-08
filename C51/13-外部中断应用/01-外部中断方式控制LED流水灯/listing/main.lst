@@ -1,0 +1,56 @@
+C51 COMPILER V9.01   MAIN                                                                  02/12/2023 18:22:39 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listi
+                    -ng\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          
+   3          void EX0_Init(void);
+   4          sbit LED = P1^0;
+   5          void main()
+   6          {
+   7   1              EX0_Init();
+   8   1              while(1)
+   9   1              {
+  10   2                      
+  11   2              }
+  12   1      }
+  13          
+  14          void EX0_Init(void) //外部中断0初始化函数
+  15          {
+  16   1              //1.设置触发方式 外部中断零
+  17   1              IT0 = 1; //设置下降沿触发 TCON中
+  18   1              EX0 = 1; EA = 1;  //特殊功能寄存器IE当中
+  19   1      }
+  20          /********************************
+  21          1.中断服务函数一定是一个没有返回值的函数
+  22          2.中断服务函数一定是没有参数的函数
+  23          3.中断服务函数函数名后面要跟关键字 interrupt
+  24          4.中断服务函数 interrupt n 0 - 4， 5个中断源(中断向量的入口地址) 
+  25          8*n + 0003H  0003H INT0           000BH T0  0013H INT1      001BH T1     0023H ES
+  26          5.中断服务函数不能被主程序或其他程序调用
+  27          6.n后面跟using m （0-3）工作寄存器组 
+  28          ********************************/
+  29          void EX0_ISR(void) interrupt 0 
+  30          {
+  31   1              LED = ~LED;      //中断服务函数中的内容
+  32   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     15    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,6 @@
+"..\delay.obj",
+"..\display.obj",
+"..\key.obj",
+"..\main.obj" 
+TO "..\矩阵按键线反转识别法" 
+PRINT("..\listing\矩阵按键线反转识别法.m51")

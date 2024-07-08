@@ -1,0 +1,110 @@
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 02:25:15 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listi
+                    -ng\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"display.h"
+   3          #include<intrins.h>
+   4          
+   5          
+   6          
+   7          
+   8          unsigned char secCnt;
+   9          unsigned char temp = 0xfe;
+  10          unsigned char sec = 60;
+  11          unsigned char timerCnt;
+  12          void Timer0Init(void);
+  13          void Timer1Init(void);
+  14          void main()
+  15          {
+  16   1              Timer0Init();
+  17   1              Timer1Init();
+  18   1              EA = 1;
+  19   1              while(1)
+  20   1              {
+  21   2                      LEDBuf[2]=sec/10;
+  22   2                      LEDBuf[3]=sec%10;
+  23   2              }
+  24   1      
+  25   1      }
+  26          
+  27          
+  28          void Timer0Init(void)           //1毫秒@12.000MHz
+  29          {
+  30   1              
+  31   1              TMOD &= 0xF0;           //设置定时器模式
+  32   1              TMOD |= 0x01;
+  33   1              TL0 = 0x18;             //设置定时初值
+  34   1              TH0 = 0xFC;             //设置定时初值
+  35   1              TF0 = 0;                //清除TF0标志
+  36   1              TR0 = 1;                //定时器0开始计时
+  37   1              ET0 = 1;
+  38   1      }
+  39          
+  40          
+  41          void  timer0_ISR(void) interrupt 1
+  42          {
+  43   1              TR0 = 0;
+  44   1              Display();
+  45   1              TL0 = 0x18;             //设置定时初值
+  46   1              TH0 = 0xFC;
+  47   1              TR0 = 1;
+  48   1      }
+  49          
+  50          void Timer1Init(void)           //50毫秒@12.000MHz
+  51          {
+  52   1              
+  53   1              TMOD &= 0x0F;           //设置定时器模式
+  54   1              TMOD |= 0x10;
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 02:25:15 PAGE 2   
+
+  55   1              TL1 = 0xB0;             //设置定时初值
+  56   1              TH1 = 0x3C;             //设置定时初值
+  57   1              TF1 = 0;                //清除TF1标志
+  58   1              TR1 = 1;                //定时器1开始计时
+  59   1              ET1 = 1;
+  60   1      }
+  61          
+  62          void  timer1_ISR(void) interrupt 3
+  63          {
+  64   1              TR1 = 0;
+  65   1              secCnt++;
+  66   1              timerCnt++;
+  67   1              if(timerCnt>=10)
+  68   1              {
+  69   2                      timerCnt=0;
+  70   2                      P1 = temp;
+  71   2                      temp = _cror_(temp,1);
+  72   2              }
+  73   1              if(secCnt>=20)
+  74   1              {
+  75   2                      secCnt=0;
+  76   2                      sec--;
+  77   2                      if(sec>60)
+  78   2                              sec =60;
+  79   2              }
+  80   1      
+  81   1              TL1 = 0xB0;             //设置定时初值
+  82   1              TH1 = 0x3C;
+  83   1              TR1 = 1;
+  84   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    216    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

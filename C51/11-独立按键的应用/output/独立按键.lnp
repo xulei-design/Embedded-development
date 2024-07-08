@@ -1,0 +1,6 @@
+"..\output\main.obj",
+"..\output\key.obj",
+"..\output\delay.obj",
+"..\output\display.obj" 
+TO "..\output\独立按键" 
+PRINT(".\独立按键.m51")

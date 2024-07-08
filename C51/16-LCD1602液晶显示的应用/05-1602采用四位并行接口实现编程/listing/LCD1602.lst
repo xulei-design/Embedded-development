@@ -1,0 +1,252 @@
+C51 COMPILER V9.54   LCD1602                                                               04/19/2023 16:23:07 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN ..\output\LCD1602.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\LCD1602.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJE
+                    -CTEXTEND PRINT(..\listing\LCD1602.lst) OBJECT(..\output\LCD1602.obj)
+
+line level    source
+
+   1          #include "LCD1602.h"
+   2          
+   3          #ifndef LCD_1602_4PINS
+              void LCDReadBF()  //忙为检测
+              {
+                  unsigned char state;
+                  unsigned char i;
+                  LCD1602_DB = 0xFF; //IO口置1，做输入
+                  LCD1602_RS = 0;
+                  LCD1602_RW = 1;
+                  
+                  do
+                  {
+                      LCD1602_EN = 1;
+                      state = LCD1602_DB; 
+                      LCD1602_EN = 0;
+                      i++;
+                      if(i>50)  //忙信号一直为1，自动退出
+                      {
+                          break;
+                      }
+                  }
+                  while(state & 0x80); //最高位为1，忙，等待。最高位为0，退出循环
+              }
+              #else
+  26          void LCDReadBF()  //忙为检测
+  27          {
+  28   1          unsigned char state;
+  29   1          unsigned char i;
+  30   1          LCD1602_DB |= 0xF0; //高四位IO口置1，低四位保持不变，做输入
+  31   1          LCD1602_RS = 0;
+  32   1          LCD1602_RW = 1;
+  33   1          
+  34   1          do
+  35   1          {
+  36   2              LCD1602_EN = 1;
+  37   2              state = LCD1602_DB & 0xF0; //先读高四位
+  38   2              LCD1602_EN = 0;
+  39   2              
+  40   2              LCD1602_EN = 1;
+  41   2              state |= (LCD1602_DB&0xF0)>>4 ; //读低四位
+  42   2              LCD1602_EN = 0;
+  43   2              i++;
+  44   2              if(i>50)  //忙信号一直为1，自动退出
+  45   2              {
+  46   3                  break;
+  47   3              }
+  48   2          }
+  49   1          while(state & 0x80); //最高位为1，忙，等待。最高位为0，退出循环
+  50   1      }
+  51          #endif
+  52          
+  53          #ifndef LCD_1602_4PINS
+              void LCDWriteCmd(unsigned char cmd)
+C51 COMPILER V9.54   LCD1602                                                               04/19/2023 16:23:07 PAGE 2   
+
+              {
+                  LCDReadBF(); //等待忙检测，不忙时操作
+                  LCD1602_RS = 0; //写命令
+                  LCD1602_RW = 0;
+                  LCD1602_DB = cmd;
+                  LCD1602_EN = 1;  //不忙时，LCD1602_EN已经为0
+                  //不需要延时了，因为处理一个指令的时间大于tpw
+                  LCD1602_EN = 0;
+                  
+              }
+              #else
+  66          void LCDWriteCmd(unsigned char cmd)
+  67          {
+  68   1          LCD1602_RS = 0; //写命令
+  69   1          LCD1602_RW = 0;
+  70   1          LCD1602_DB = cmd; //写高四位
+  71   1          LCD1602_EN = 1;  //不忙时，LCD1602_EN已经为0
+  72   1          delayxms(1);//不需要延时了，因为处理一个指令的时间大于tpw
+  73   1          LCD1602_EN = 0;
+  74   1          
+  75   1          LCD1602_DB = cmd << 4; //写低四位
+  76   1          LCD1602_EN = 1;  
+  77   1          delayxms(1);
+  78   1          LCD1602_EN = 0;
+  79   1          
+  80   1      }
+  81          #endif
+  82          #ifndef LCD_1602_4PINS
+              void LCDWriteData(unsigned char dat)
+              {
+                  LCDReadBF(); //等待忙检测，不忙时操作
+                  LCD1602_RS = 1; //写数据
+                  LCD1602_RW = 0;
+                  LCD1602_DB = dat;
+                  LCD1602_EN = 1;  //不忙时，LCD1602_EN已经为0
+                  //不需要延时了，因为处理一个指令的时间大于tpw
+                  LCD1602_EN = 0;
+              }
+              #else
+  94          void LCDWriteData(unsigned char dat)
+  95          {
+  96   1          LCDReadBF(); //等待忙检测，不忙时操作
+  97   1          LCDReadBF(); //等待忙检测，不忙时操作
+  98   1          LCD1602_RS = 1; //写数据
+  99   1          LCD1602_RW = 0;
+ 100   1          LCD1602_DB = dat;
+ 101   1          LCD1602_EN = 1;  //不忙时，LCD1602_EN已经为0
+ 102   1          delayxms(1);//不需要延时了，因为处理一个指令的时间大于tpw
+ 103   1          LCD1602_EN = 0;
+ 104   1          
+ 105   1          LCD1602_DB = dat << 4;
+ 106   1          LCD1602_EN = 1;  //不忙时，LCD1602_EN已经为0
+ 107   1          delayxms(1);//不需要延时了，因为处理一个指令的时间大于tpw
+ 108   1          LCD1602_EN = 0;
+ 109   1      }
+ 110          #endif
+ 111          #ifndef LCD_1602_4PINS
+              void LCDInit() //LCD4位并行接口的初始化
+              {
+                  LCDWriteCmd(LCD_MODE_PIN8); //显示的模式设置两行5*8的点阵
+                  LCDWriteCmd(LCD_DIS_ON);  //显示开,光标关,光标不闪烁
+                  LCDWriteCmd(LCD_CURSOR_RIGHT);  //光标右移,显示不移动
+C51 COMPILER V9.54   LCD1602                                                               04/19/2023 16:23:07 PAGE 3   
+
+                  LCDWriteCmd(LCD_SCREEN_CLR);  //清屏
+              }
+              #else
+ 120          void LCDInit() //LCD初始化
+ 121          {
+ 122   1          LCDWriteCmd(0x33);
+ 123   1          LCDWriteCmd(0x32);
+ 124   1          LCDWriteCmd(LCD_MODE_PIN4); //显示的模式设置两行5*8的点阵
+ 125   1          LCDWriteCmd(LCD_DIS_ON);  //显示开,光标关,光标不闪烁
+ 126   1          LCDWriteCmd(LCD_CURSOR_RIGHT);  //光标右移,显示不移动
+ 127   1          LCDWriteCmd(LCD_SCREEN_CLR);  //清屏
+ 128   1      }
+ 129          #endif
+ 130          
+ 131          void LCDSetPosition(unsigned char x,unsigned char y) //确定显示位置的函数
+ 132          {
+ 133   1          if(0==y)  //DDRAM地址设置
+ 134   1          {
+ 135   2              LCDWriteCmd(0x80 | x);  //显示在第一行某个位置
+ 136   2          }
+ 137   1          else
+ 138   1          {
+ 139   2              LCDWriteCmd(0x80 | (0x40+x)); //显示在第二行某个位置
+ 140   2          }
+ 141   1      }
+ 142          void LCDShowStr(unsigned char x,unsigned char y,unsigned char *str)
+ 143          {
+ 144   1          LCDSetPosition(x,y);
+ 145   1          while(*str != '\0')
+ 146   1          {
+ 147   2              LCDWriteData(*str++);
+ 148   2          }
+ 149   1      }
+ 150          
+ 151          //第一种方法
+ 152          /***void LCDWriteCGRAM()
+ 153          {
+ 154              unsigned char i;
+ 155              LCDWriteCmd(0x40); //1,构造自定义的字符
+ 156              for(i = 0;i < 8;i++)
+ 157              {
+ 158                  LCDWriteData(str[i]);
+ 159              }
+ 160              //显示这个字符
+ 161              LCDWriteCmd(0x80 | 0x05);
+ 162              LCDWriteData(0x00); //写大字符所在地址
+ 163              
+ 164          }
+ 165          ***/
+ 166          
+ 167          /***
+ 168          名称：LCDSetChar
+ 169          参数：x-列，y-行，pos-CGRAM位置 *str-自定义字符数据
+ 170          参数：无
+ 171          功能：自定义字符显示
+ 172          ***/
+ 173          void LCDSetChar(unsigned char x,unsigned char y,unsigned char pos,unsigned char *str)
+ 174          {
+ 175   1          //范围限定x:0~16,y:0~1,pos:0~7 str:显示字符的指针
+ 176   1          unsigned char i;
+ 177   1          //先构造自定义字符 确定位置 CGRAM
+ 178   1          for(i = 0;i<8;i++)
+C51 COMPILER V9.54   LCD1602                                                               04/19/2023 16:23:07 PAGE 4   
+
+ 179   1          {
+ 180   2              LCDWriteCmd(0x40+pos*8+i);  //写数据地址
+ 181   2              LCDWriteData(*(str+i));
+ 182   2          }
+ 183   1          //显示
+ 184   1          LCDSetPosition(x,y); //设置显示位置，DDRAM
+ 185   1          LCDWriteData(0x00+pos); //显示代码
+ 186   1          
+ 187   1      }
+ 188          
+ 189          
+ 190          /***
+ 191          名称：IntegerToStr
+ 192          参数：dat 整形数据  *str字符数据
+ 193          参数：字符数组的字符长度
+ 194          功能：整型数转字符串
+ 195          ***/
+ 196          unsigned char IntegerToStr(int dat,unsigned char *str) 
+ 197          //带有返回值的函数，返回值为字符串的长度,将数字转换为字符串的函数
+ 198          {
+ 199   1          unsigned char i;
+ 200   1          unsigned char len;
+ 201   1          unsigned char buf[6];
+ 202   1          if(dat < 0)
+ 203   1          {
+ 204   2              dat = -dat; //如果是负数，取绝对值。
+ 205   2              *str++ = '-';
+ 206   2              len++;
+ 207   2          }
+ 208   1          do  //分离数据
+ 209   1          {
+ 210   2              buf[i++] = dat%10 + '0'; //dat%10 + 0x30  buf[0] = '8' buf[1] = '7' buf[2] = '6'
+ 211   2              dat /= 10;
+ 212   2          }
+ 213   1          while(dat > 0);
+ 214   1          len += i;
+ 215   1          while(i-- > 0) //反数据
+ 216   1          {
+ 217   2              *str++ = buf[i];
+ 218   2          }
+ 219   1          *str = '\0';  //字符串加一个结束符
+ 220   1          return len;
+ 221   1      }
+ 222          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    436    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      27
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

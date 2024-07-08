@@ -1,0 +1,4 @@
+"..\output\main.obj",
+"..\output\display.obj" 
+TO "..\output\定时器中断方式实现数码管动态刷新" 
+PRINT("..\listing\定时器中断方式实现数码管动态刷新.m51")

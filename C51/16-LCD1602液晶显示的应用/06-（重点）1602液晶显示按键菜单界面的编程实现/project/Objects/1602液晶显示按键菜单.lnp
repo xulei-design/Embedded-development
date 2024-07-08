@@ -1,0 +1,6 @@
+".\Objects\delay.obj",
+".\Objects\LCD1602.obj",
+".\Objects\main.obj",
+".\Objects\key.obj" 
+TO ".\Objects\1602液晶显示按键菜单" 
+PRINT(".\Listings\1602液晶显示按键菜单.m51") RAMSIZE(256) 

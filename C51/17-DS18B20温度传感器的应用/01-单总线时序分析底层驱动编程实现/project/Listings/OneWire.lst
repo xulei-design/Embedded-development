@@ -1,0 +1,44 @@
+C51 COMPILER V9.54   ONEWIRE                                                               04/20/2023 23:50:50 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ONEWIRE
+OBJECT MODULE PLACED IN .\Objects\OneWire.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\OneWire.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJE
+                    -CTEXTEND PRINT(.\Listings\OneWire.lst) OBJECT(.\Objects\OneWire.obj)
+
+line level    source
+
+   1          #include "OneWire.h"
+   2          
+   3          
+   4          
+   5          
+   6          
+   7          bit OneWireRst()
+   8          {
+   9   1          bit ack;
+  10   1          DS18B20 = 0; //拉低总线，发复位脉冲
+  11   1          Delay600us(); //480us-960us，取600us
+  12   1          DS18B20 = 1; //释放总线
+  13   1          Delay60us(); //15-60us,取60us
+  14   1          ack = DS18B20; //读取I/O口，读取18B20
+  15   1          while(!DS18B20); //等待18B20释放总线，等待存在脉冲结束，才能进入下一步
+  16   1          return ack;
+  17   1          
+  18   1      }
+  19          
+  20          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     20    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,5 @@
+"..\output\main.obj",
+"..\output\delay.obj",
+"..\output\uart.obj" 
+TO "..\output\自定义通信协议" 
+PRINT("..\listing\自定义通信协议.m51") RAMSIZE(256) 

@@ -1,0 +1,36 @@
+C51 COMPILER V9.54   MAIN                                                                  03/06/2023 06:11:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "uart.h"
+   3          
+   4          
+   5          void main()
+   6          {
+   7   1          unsigned char i;
+   8   1          UartInit();
+   9   1              printf("Wait for Serial Communication Test Start.\r\n");
+  10   1              printf("Please Send a command:\r\n");
+  11   1          while(1)
+  12   1          {
+  13   2              if(recv_flag == 1)
+  14   2              {
+  15   3                  recv_flag = 0; 
+  16   3                  if(i = 0; i < recv_length; i++)
+*** ERROR C141 IN LINE 16 OF ..\source\main.c: syntax error near ';'
+*** ERROR C141 IN LINE 16 OF ..\source\main.c: syntax error near ')'
+  17   3                  {
+  18   4                      sendByte(recv_buf[i]);
+  19   4                  }
+  20   3              }
+  21   2          }
+  22   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  2 ERROR(S)

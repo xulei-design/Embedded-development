@@ -1,0 +1,91 @@
+C51 COMPILER V9.54   I2C                                                                   09/11/2023 11:20:08 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\I2C.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\I2C.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEX
+                    -TEND PRINT(.\Listings\I2C.lst) OBJECT(.\Objects\I2C.obj)
+
+line level    source
+
+   1          /******************
+   2          文件名：I2C.c
+   3          功能： 单片机IO口模拟I2C基本时序，I2C底层函数
+   4          版本：
+   5          修订时间：
+   6          ****************/
+   7          
+   8          #include "I2C.h"
+   9          
+  10          
+  11          /**************************
+  12          函数名：I2CStart
+  13          功能：I2C启动信号
+  14          参数：无
+  15          返回值：无
+  16          ***************************/ 
+  17          void I2CStart() //启动总线函数
+  18          {
+  19   1          I2C_SCL = 1;  //总线空闲时 SCL SDA都为高电平
+  20   1          I2C_SDA = 1;
+  21   1          I2CDelay(); //SCL保持4.7个us之后，拉低SDA，产生起始信号
+  22   1          I2C_SDA = 0;
+  23   1          I2CDelay(); //SCL再维持4.7个us之后，拉低SCL，一个时钟周期结束
+  24   1          I2C_SCL = 0;
+  25   1      }
+  26          
+  27          
+  28          /********************
+  29          函数名：I2CWriteByte
+  30          功能：写一数据字节到总线上，并接受应答位
+  31          参数：待数据写入
+  32          返回值：读取应答位 0:应答， 1:非应答
+  33          *********************/
+  34          bit I2CWriteByte(unsigned char dat) //写一个字节的函数
+  35          {
+*** ERROR C231 IN LINE 35 OF ..\source\I2C.c: '_I2CWriteByte': redefinition
+  36   1          unsigned char temp;
+  37   1          for(temp = 0x80; temp != 0; temp >>= 1) //从最高位开始写
+  38   1          {
+  39   2              if((temp & dat) == 0) //当前位为0
+  40   2                  I2C_SDA = 0;
+  41   2              else                  //当前位为 1
+  42   2                  I2C_SDA = 1;    
+  43   2              I2CDelay(); //延时至少4us 使得SCL保持低
+  44   2              I2C_SCL = 1; //拉高 器件读数据位
+  45   2              I2CDelay(); //延时至少4us 使得SCL保持高
+  46   2              I2C_SCL = 0; //拉低
+  47   2          }
+  48   1          ack = I2CReccvAck();
+*** ERROR C202 IN LINE 48 OF ..\source\I2C.c: 'ack': undefined identifier
+  49   1          return ack;
+*** ERROR C202 IN LINE 49 OF ..\source\I2C.c: 'ack': undefined identifier
+  50   1      }
+*** ERROR C231 IN LINE 50 OF ..\source\I2C.c: '_I2CWriteByte': redefinition
+C51 COMPILER V9.54   I2C                                                                   09/11/2023 11:20:08 PAGE 2   
+
+  51          bit I2CReccvAck() //读应答信号
+  52          {
+  53   1          bit ack;
+  54   1          I2C_SDA = 1; //主机主动释放SDA，为读ACK做准备
+  55   1          I2CDelay();  //SCL保持4.7us低
+  56   1          I2C_SCL = 1;
+  57   1          ack = I2C_SDA;
+  58   1          I2CDelay();
+  59   1          I2C_SCL = 0; //拉低SCL
+  60   1          return (ack);
+  61   1          
+  62   1      }
+  63          
+  64          void I2CStop()
+  65          {
+  66   1          I2C_SCL = 0;  
+  67   1          I2C_SDA = 0;
+  68   1          I2CDelay();
+  69   1          I2C_SCL = 1;
+  70   1          I2CDelay();
+  71   1          I2C_SDA = 1;
+  72   1          I2CDelay();
+  73   1      }  
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  4 ERROR(S)

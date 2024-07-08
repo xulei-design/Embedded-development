@@ -1,0 +1,5 @@
+".\main.obj",
+".\key.obj",
+".\display.obj",
+".\delay.obj" 
+TO "独立按键控制流水灯" 

@@ -1,0 +1,5 @@
+"..\output\main.obj",
+"..\output\delay.obj",
+"..\output\uart.obj" 
+TO "..\output\解析数据帧头的通信程序" 
+PRINT("..\listing\解析数据帧头的通信程序.m51") RAMSIZE(256) 

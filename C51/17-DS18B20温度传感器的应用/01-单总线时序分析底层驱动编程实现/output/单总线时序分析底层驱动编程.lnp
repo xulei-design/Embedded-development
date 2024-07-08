@@ -1,0 +1,6 @@
+"..\output\delay.obj",
+"..\output\LCD1602.obj",
+"..\output\main.obj",
+"..\output\OneWire.obj" 
+TO "..\output\单总线时序分析底层驱动编程" 
+PRINT("..\listing\单总线时序分析底层驱动编程.m51") RAMSIZE(256) 

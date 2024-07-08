@@ -1,0 +1,13 @@
+C51 COMPILER V9.01   DELAY                                                                 05/23/2022 15:54:31 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DELAY
+OBJECT MODULE PLACED IN .\delay.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\06-库函数实现流水灯\source\delay.c BROWSE DEBUG OBJECT
+                    -EXTEND PRINT(.\delay.lst) OBJECT(.\delay.obj)
+
+line level    source
+
+*** ERROR C318 OF ..\06-库函适迪至魉芢source\delay.c: can't open file '..\06-库函适迪至魉芢source\delay.c'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

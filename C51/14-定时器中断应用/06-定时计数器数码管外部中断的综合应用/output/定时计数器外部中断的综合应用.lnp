@@ -1,0 +1,4 @@
+"..\output\main.obj",
+"..\output\display.obj" 
+TO "..\output\定时计数器外部中断的综合应用" 
+PRINT("..\listing\定时计数器外部中断的综合应用.m51")

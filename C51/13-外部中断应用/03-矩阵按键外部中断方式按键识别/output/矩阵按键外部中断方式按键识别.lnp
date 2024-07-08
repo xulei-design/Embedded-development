@@ -1,0 +1,6 @@
+"..\output\delay.obj",
+"..\output\display.obj",
+"..\output\key.obj",
+"..\output\main.obj" 
+TO "..\output\矩阵按键外部中断方式按键识别" 
+PRINT("..\listing\矩阵按键外部中断方式按键识别.m51")

@@ -1,0 +1,6 @@
+"..\output\I2C.obj",
+"..\output\LCD1602.obj",
+"..\output\main.obj",
+"..\output\delay.obj" 
+TO "..\output\EEPROM" 
+PRINT("..\listing\EEPROM.m51") RAMSIZE(256) 

@@ -1,0 +1,7 @@
+".\Objects\delay.obj",
+".\Objects\I2C.obj",
+".\Objects\LCD1602.obj",
+".\Objects\main.obj",
+".\Objects\EEPROM.obj" 
+TO ".\Objects\读写I2C总器件" 
+PRINT(".\Listings\读写I2C总器件.m51") RAMSIZE(256) 

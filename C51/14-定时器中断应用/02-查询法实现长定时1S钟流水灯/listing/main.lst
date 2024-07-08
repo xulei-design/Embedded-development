@@ -1,0 +1,58 @@
+C51 COMPILER V9.01   MAIN                                                                  02/16/2023 18:27:27 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listi
+                    -ng\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<intrins.h>
+   3          
+   4          unsigned char timerCnt;
+   5          unsigned char temp = 0x01;
+   6          void timer0_Iint();
+   7          void main()
+   8          {
+   9   1          timer0_Iint();
+  10   1              while(1)
+  11   1              {
+  12   2                      if(TF0 == 1)
+  13   2                      {
+  14   3                              TF0 = 0;
+  15   3                              TH0 = (65536-20000)/256;
+  16   3                              TL0 = (65536-20000)%256;
+  17   3                              timerCnt++;
+  18   3                              if(timerCnt >=50)
+  19   3                                      {
+  20   4                                              timerCnt = 0;
+  21   4                                              P1 = temp;
+  22   4                                              temp = _crol_(temp,1);
+  23   4                                      }
+  24   3                      }
+  25   2              }
+  26   1      }
+  27          
+  28          void timer0_Iint()
+  29          {
+  30   1              TMOD = 0x01;
+  31   1              TH0 = (65536-20000)/256;
+  32   1              TL0 = (65536-20000)%256;
+  33   1              TR0 = 1;
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     56    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

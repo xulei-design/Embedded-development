@@ -1,0 +1,5 @@
+"..\output\delay.obj",
+"..\output\LCD1602.obj",
+"..\output\main.obj" 
+TO "..\output\用户自定义字符的编程实现" 
+PRINT("..\listing\用户自定义字符的编程实现.m51") RAMSIZE(256) 

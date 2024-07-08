@@ -1,0 +1,5 @@
+".\Objects\delay.obj",
+".\Objects\LCD1602.obj",
+".\Objects\main.obj" 
+TO ".\Objects\四位并行接口高四位" 
+PRINT(".\Listings\四位并行接口高四位.m51") RAMSIZE(256) 

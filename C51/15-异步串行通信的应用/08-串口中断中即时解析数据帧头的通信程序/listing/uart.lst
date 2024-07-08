@@ -1,0 +1,161 @@
+C51 COMPILER V9.54   UART                                                                  04/13/2023 22:11:37 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN ..\output\uart.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\uart.lst) OBJECT(..\output\uart.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          
+   3          
+   4          
+   5          unsigned char recv_buf[MAX_REV_NUM];
+   6          unsigned char recv_cnt;
+   7          unsigned char recv_flag=0;
+   8          unsigned char machine_step = 0;
+   9          
+  10          
+  11          
+  12          void UartInit(void)             //9600bps@11.0592MHz
+  13          {
+  14   1              SCON = 0x50;            //8位数据,可变波特率
+  15   1              TMOD &= 0x0F;           //清除定时器1模式位
+  16   1              TMOD |= 0x20;           //设定定时器1为8位自动重装方式
+  17   1              TL1 = 0xFD;             //设定定时初值
+  18   1              TH1 = 0xFD;             //设定定时器重装值
+  19   1              ET1 = 0;                //禁止定时器1中断
+  20   1              TR1 = 1;                //启动定时器1
+  21   1          ES = 1;         //串行中断打开
+  22   1          
+  23   1      }
+  24          
+  25          void sendByte(unsigned char dat)
+  26          {
+  27   1              SBUF = dat;
+  28   1              while(!TI);  //发送等待，发送完成，将发送中断位清0
+  29   1                      TI = 0;
+  30   1      }
+  31          
+  32          void sendString(unsigned char *dat) //只需传递首地址
+  33          {
+  34   1         while(*dat != '\0')
+  35   1         {
+  36   2              sendByte(*(dat++)); //*dat代表的是首地址 *dat = &dat
+  37   2         }       
+  38   1      }
+  39          
+  40          char putchar(char c) //c语言中是打印到屏幕，现在让它打印到串口，定向到串口
+  41          //printf重定向
+  42          {
+  43   1          sendByte(c);
+  44   1          return c;
+  45   1      }
+  46          
+  47          void clr_recvbuffer(unsigned char *buf)
+  48          {
+  49   1          unsigned char i;
+  50   1          for(i=0;i<MAX_REV_NUM;i++)
+  51   1          {
+  52   2              buf[i] = 0;
+  53   2          }
+  54   1      }
+C51 COMPILER V9.54   UART                                                                  04/13/2023 22:11:37 PAGE 2   
+
+  55          
+  56          
+  57          void uart_ISR(void) interrupt 4 
+  58          //串行口中断服务函数
+  59          //计算机发送一帧数据通过com3口传递到com2口，然后通过com2传递给单片机，
+  60          //当单片机接收完这一帧数据时，接收中断RI会置1，进入到中断函数中对数据进行处理，
+  61          {
+  62   1          static unsigned char recv_cnt = 0;
+  63   1          if(RI)
+  64   1          {
+  65   2              RI = 0;
+  66   2              switch(machine_step)
+  67   2              {
+  68   3                  case 0:recv_buf[0] = SBUF;
+  69   3                      if(recv_buf[0] == 0xAA)
+  70   3                      {
+  71   4                          machine_step = 1;
+  72   4                      }
+  73   3                      else
+  74   3                      {
+  75   4                          machine_step = 0;
+  76   4                      }
+  77   3                  break;
+  78   3                  case 1:recv_buf[1] = SBUF;
+  79   3                      if(recv_buf[1] == 0x55)
+  80   3                      {
+  81   4                          machine_step = 2;
+  82   4                          recv_cnt = 2;
+  83   4                      }
+  84   3                      else
+  85   3                      {
+  86   4                          machine_step = 0;
+  87   4                      }
+  88   3                  break;
+  89   3                  case 2: recv_buf[recv_cnt] = SBUF;
+  90   3                      recv_cnt++;
+  91   3                      if(recv_cnt > 4)
+  92   3                      {
+  93   4                          machine_step = 3;
+  94   4                      }
+  95   3                      else
+  96   3                      {
+  97   4                          machine_step = 2;
+  98   4                      }
+  99   3                  break;
+ 100   3                  case 3:recv_buf[recv_cnt] = SBUF; 
+ 101   3                      if(recv_buf[recv_cnt] == 0x0D) //判断正确接收
+ 102   3                      {
+ 103   4                          switch(recv_buf[2]) //取点亮/蜂鸣器响数据
+ 104   4                              case 11: //控制LED灯
+ 105   4                                  led_data = recv_buf[3]; //led_data是一个字，16位
+ 106   4                                  led_data = led_data << 8;
+ 107   4                                  led_data = led_data + recv_buf[4];
+ 108   4                                  led_cnt = 0; //目的是使LED点亮上述接收的数据的时间
+ 109   4                                  break;
+ 110   4                              case 12: //控制蜂鸣器
+ 111   4                                  beep_data = recv_buf[3]; //led_data是一个字，16位
+ 112   4                                  beep_data = led_data << 8;
+ 113   4                                  beep_data = led_data + recv_buf[4];
+ 114   4                                  beep_cnt = beep_data; 
+ 115   4                                  break;
+ 116   4                              machine_step = 0;
+C51 COMPILER V9.54   UART                                                                  04/13/2023 22:11:37 PAGE 3   
+
+ 117   4                              recv_cnt = 0;
+ 118   4                              recv_flag = 1; //接受完一串数据，标志位置1
+ 119   4                      }
+ 120   3                      
+ 121   3                  break; 
+ 122   3                  defalut :break;
+ 123   3              }
+ 124   2          }
+ 125   1          if(TI)
+ 126   1          {
+ 127   2              TI = 0;
+ 128   2          }
+ 129   1      }
+*** WARNING C280 IN LINE 122 OF ..\source\uart.c: 'defalut': unreferenced label
+ 130          
+ 131          
+*** WARNING C294 IN LINE 116 OF ..\source\uart.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    306    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     24       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

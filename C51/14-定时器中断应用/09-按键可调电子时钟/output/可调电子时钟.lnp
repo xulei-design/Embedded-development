@@ -1,0 +1,4 @@
+"..\output\display.obj",
+"..\output\main.obj" 
+TO "..\output\可调电子时钟" 
+PRINT("..\listing\可调电子时钟.m51")

@@ -1,0 +1,147 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        05/28/2022  00:59:34  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL\KEIL\KEIL INSTALL\C51\BIN\BL51.EXE ..\output\main.obj, ..\output\delay.obj TO ..\output\fmqProject PRINT (..\lis
+>> ting\fmqProject.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\output\main.obj (MAIN)
+  ..\output\delay.obj (DELAY)
+  E:\KEIL\KEIL\KEIL INSTALL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  ..\output\fmqProject (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         _DATA_GROUP_
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0034H     UNIT         ?PR?MAIN?MAIN
+            CODE    0037H     001EH     UNIT         ?PR?_DELAYXMS?DELAY
+            CODE    0055H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0061H     000AH     UNIT         ?PR?DELAY956US?DELAY
+            CODE    006BH     000AH     UNIT         ?PR?DELAY1280US?DELAY
+
+
+
+OVERLAY MAP OF MODULE:   ..\output\fmqProject (MAIN)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                  0008H    0002H
+  +--> ?PR?DELAY956US?DELAY
+  +--> ?PR?DELAY1280US?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  ..\output\fmqProject (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B0H         PUBLIC        P3
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/28/2022  00:59:34  PAGE 2
+
+
+  C:0003H         PUBLIC        main
+  B:00B0H.7       PUBLIC        sound
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:0003H         LINE#         8
+  C:0003H         LINE#         9
+  C:0003H         LINE#         11
+  C:0003H         LINE#         12
+  C:0003H         LINE#         13
+  C:000EH         LINE#         14
+  C:000EH         LINE#         15
+  C:0010H         LINE#         16
+  C:0013H         LINE#         17
+  C:001DH         LINE#         18
+  C:0028H         LINE#         19
+  C:0028H         LINE#         20
+  C:002AH         LINE#         21
+  C:002DH         LINE#         22
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0061H         PUBLIC        Delay956us
+  C:006BH         PUBLIC        Delay1280us
+  C:0037H         PUBLIC        _delayxms
+  -------         PROC          _DELAYXMS
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0037H         LINE#         7
+  C:0037H         LINE#         8
+  C:0037H         LINE#         10
+  C:0040H         LINE#         11
+  C:0040H         LINE#         12
+  C:0044H         LINE#         13
+  C:004DH         LINE#         14
+  C:0054H         LINE#         15
+  -------         ENDPROC       _DELAYXMS
+  -------         PROC          DELAY956US
+  -------         DO            
+  D:0007H         SYMBOL        i
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:0061H         LINE#         16
+  C:0061H         LINE#         17
+  C:0061H         LINE#         20
+  C:0062H         LINE#         21
+  C:0064H         LINE#         22
+  C:0066H         LINE#         24
+  C:0066H         LINE#         25
+  C:0068H         LINE#         26
+  C:006AH         LINE#         27
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/28/2022  00:59:34  PAGE 3
+
+
+  -------         ENDPROC       DELAY956US
+  -------         PROC          DELAY1280US
+  -------         DO            
+  D:0007H         SYMBOL        i
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:006BH         LINE#         28
+  C:006BH         LINE#         29
+  C:006BH         LINE#         32
+  C:006CH         LINE#         33
+  C:006EH         LINE#         34
+  C:0070H         LINE#         36
+  C:0070H         LINE#         37
+  C:0072H         LINE#         38
+  C:0074H         LINE#         39
+  -------         ENDPROC       DELAY1280US
+  -------         ENDMOD        DELAY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAYXMS?DELAY
+
+Program Size: data=11.0 xdata=0 code=117
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

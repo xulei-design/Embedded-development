@@ -1,0 +1,91 @@
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 01:29:46 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listi
+                    -ng\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"display.h"
+   3          
+   4                  
+   5          sbit LED = P1^0;
+   6          unsigned int systemTimer = 0;
+   7          unsigned char systemFlag = 1;
+   8          unsigned int Num=9875;
+   9          void Timer0Init(void);
+  10          void Dis_Service();
+  11          void main()
+  12          {
+  13   1                      
+  14   1              Timer0Init();
+  15   1              do
+  16   1              {
+  17   2                      if(systemTimer%50==0) //开机指示
+  18   2                      LED = ~LED;     
+  19   2              }while(systemTimer<5000); // 5S 5000ms/1ms
+  20   1              systemFlag = 0;
+  21   1              LED = 1;
+  22   1              while(1)                 //while(1) 与定时器并行
+  23   1              {
+  24   2                      Dis_Service();
+  25   2              }
+  26   1      }
+  27          
+  28          
+  29          void Timer0Init(void)           //1毫秒@12.000MHz
+  30          {
+  31   1              TMOD &= 0xF0;           
+  32   1              TMOD |= 0x01;   //设置定时器模式
+  33   1          TL0 = 0x0C;         //设置定时初值
+  34   1              TH0 = 0xFE;             //设置定时初值
+  35   1              TF0 = 0;                //清除TF0标志
+  36   1              EA = 1;
+  37   1              ET0 = 1;
+  38   1              TR0 = 1;                //定时器0开始计时
+  39   1      }
+  40          
+  41          
+  42          
+  43          void Dis_Service()
+  44          {
+  45   1              LEDBuf[0] = Num/1000;
+  46   1              LEDBuf[1] = Num/100%10;
+  47   1              LEDBuf[2] = Num/10%10;
+  48   1              LEDBuf[3] = Num%10;
+  49   1      }
+  50          
+  51          
+  52          void timer0_ISR(void) interrupt 1
+  53          {
+  54   1      
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 01:29:46 PAGE 2   
+
+  55   1              TR0 = 0;
+  56   1              if(systemFlag == 1)
+  57   1              {
+  58   2                      systemTimer++;  
+  59   2              }
+  60   1              
+  61   1              Display();
+  62   1          TL0 = 0x0C;         //设置定时初值
+  63   1              TH0 = 0xFE;             //设置定时初值
+  64   1              TR0 = 1;
+  65   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    211    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

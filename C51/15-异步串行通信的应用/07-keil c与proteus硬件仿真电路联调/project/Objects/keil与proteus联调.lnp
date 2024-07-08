@@ -1,0 +1,5 @@
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\keil与proteus联调" 
+PRINT(".\Listings\keil与proteus联调.m51") RAMSIZE(256) 

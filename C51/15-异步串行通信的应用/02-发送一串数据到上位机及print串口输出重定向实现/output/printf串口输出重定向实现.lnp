@@ -1,0 +1,5 @@
+"..\output\main.obj",
+"..\output\delay.obj",
+"..\output\uart.obj" 
+TO "..\output\printf串口输出重定向实现" 
+PRINT("..\listing\printf串口输出重定向实现.m51") RAMSIZE(256) 

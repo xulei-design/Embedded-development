@@ -1,0 +1,87 @@
+C51 COMPILER V9.01   KEY                                                                   02/15/2023 16:01:51 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN ..\output\key.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\key.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listin
+                    -g\key.lst) OBJECT(..\output\key.obj)
+
+line level    source
+
+   1          #include"Key.h"
+   2          
+   3          
+   4          
+   5          unsigned char Key_Scan()
+   6          {
+   7   1              unsigned char KeyNum = 0;
+   8   1              KEY1 = 1; KEY2 = 1;     KEY3 = 1; KEY4 = 1;
+   9   1      //      if(0 == KEY1)  //1.判断按键是否按下
+  10   1      //      {
+  11   1      //              Delayxms(10);//2.延时消抖，时间一般为5-10ms
+  12   1      //              if(KEY1 == 0) //3.再次判断按键是否按下
+  13   1      //              {
+  14   1      //                      KeyNum = 1;     //4.键值的软件编码，赋一个键值，不直接做按键功能，便于模块化                                    
+  15   1      //              } while(KEY1 == 0);//5.松手等待
+  16   1      //      }
+  17   1      //      if(KEY2 == 0) //初步判断按键是否按下
+  18   1      //      {
+  19   1      //              Delayxms(10);//闭合抖动阶段，消抖
+  20   1      //              if(KEY2 == 0) //再次判断按键是否按下，有效闭合阶段，执行按键的功能。
+  21   1      //              {
+  22   1      //                      KeyNum = 2; //赋键值编码
+  23   1      //              } 
+  24   1      //              while(KEY2 == 0);//确保按键还是在有效闭合阶段。         
+  25   1      //      }
+  26   1      //      if(KEY3 == 0) //初步判断按键是否按下
+  27   1      //      {
+  28   1      //              Delayxms(10);//闭合抖动阶段，消抖
+  29   1      //              if(KEY3 == 0) //再次判断按键是否按下，有效闭合阶段，执行按键的功能。
+  30   1      //              {
+  31   1      //                      KeyNum = 3; //赋键值编码
+  32   1      //              } 
+  33   1      //              while(KEY3 == 0);//确保按键还是在有效闭合阶段。         
+  34   1      //      }
+  35   1      //      if(KEY4 == 0) //初步判断按键是否按下
+  36   1      //      {
+  37   1      //              Delayxms(10);//闭合抖动阶段，消抖
+  38   1      //              if(KEY4 == 0) //再次判断按键是否按下，有效闭合阶段，执行按键的功能。
+  39   1      //              {
+  40   1      //                      KeyNum = 4; //赋键值编码
+  41   1      //              } 
+  42   1      //              while(KEY4 == 0);//确保按键还是在有效闭合阶段。         
+  43   1      //      }
+  44   1              if(!KEY1||!KEY2||!KEY3||!KEY4)
+  45   1              {
+  46   2                      Delayxms(10);
+  47   2                      if(!KEY1||!KEY2||!KEY3||!KEY4)
+  48   2                      {
+  49   3                              if(!KEY1)
+  50   3                                      KeyNum = 1;
+  51   3                              if(!KEY2)
+  52   3                                      KeyNum = 2;
+  53   3                              if(!KEY3)
+  54   3                                      KeyNum = 3;
+C51 COMPILER V9.01   KEY                                                                   02/15/2023 16:01:51 PAGE 2   
+
+  55   3                              if(!KEY4)
+  56   3                                      KeyNum = 4;
+  57   3                      }
+  58   2                      while(!KEY1||!KEY2||!KEY3||!KEY4);
+  59   2              }
+  60   1              return KeyNum;
+  61   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     81    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

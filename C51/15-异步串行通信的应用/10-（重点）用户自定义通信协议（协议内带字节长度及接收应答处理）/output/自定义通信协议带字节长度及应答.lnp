@@ -1,0 +1,5 @@
+"..\output\delay.obj",
+"..\output\main.obj",
+"..\output\uart.obj" 
+TO "..\output\自定义通信协议带字节长度及应答" 
+PRINT("..\listing\自定义通信协议带字节长度及应答.m51") RAMSIZE(256) 

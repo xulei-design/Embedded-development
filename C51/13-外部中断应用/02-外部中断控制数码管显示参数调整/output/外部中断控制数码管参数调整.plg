@@ -1,0 +1,17 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\战神\Desktop\keilproject\13-外部中断应用\02-外部中断控制数码管显示参数调整\project\外部中断控制数码管参数调整.uvproj
+Project File Date:  02/12/2023
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+compiling delay.c...
+compiling display.c...
+linking...
+Program Size: data=16.0 xdata=0 code=558
+creating hex file from "..\output\外部中断控制数码管参数调整"...
+"..\output\外部中断控制数码管参数调整" - 0 Error(s), 0 Warning(s).

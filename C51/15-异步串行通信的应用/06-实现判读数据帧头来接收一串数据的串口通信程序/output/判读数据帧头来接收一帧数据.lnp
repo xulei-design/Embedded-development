@@ -1,0 +1,5 @@
+"..\output\delay.obj",
+"..\output\main.obj",
+"..\output\uart.obj" 
+TO "..\output\判读数据帧头来接收一帧数据" 
+PRINT("..\listing\判读数据帧头来接收一帧数据.m51") RAMSIZE(256) 

@@ -1,0 +1,84 @@
+C51 COMPILER V9.54   MAIN                                                                  03/28/2023 20:28:41 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "uart.h"
+   3          
+   4          
+   5          
+   6          void Timer0_Init(void);
+   7          void main()
+   8          {
+   9   1          UartInit();
+  10   1          Timer0_Init();
+  11   1          EA = 1;
+  12   1              printf("Wait for Serial Communication Test Start.\r\n");
+  13   1              printf("Please Send a command:\r\n");
+  14   1          while(1)
+  15   1          {
+  16   2              if(recv_flag)
+  17   2              {
+  18   3                  recv_flag = 0;
+  19   3                  start_timer = 0; //关定时器
+  20   3                  sendString(recv_buf);
+  21   3                  clr_recvbuffer(recv_buf); //清除缓冲buffer
+  22   3              }
+  23   2          }
+  24   1      }
+  25          
+  26          void Timer0_Init(void)          //1毫秒@11.0592MHz
+  27          {
+  28   1              TMOD &= 0xF0;                   //设置定时器模式
+  29   1              TMOD |= 0x01;                   //设置定时器模式
+  30   1              TL0 = 0x66;                             //设置定时初始值
+  31   1              TH0 = 0xFC;                             //设置定时初始值
+  32   1              TF0 = 0;                                //清除TF0标志
+  33   1          ET0 = 1;
+  34   1              TR0 = 1;                                //定时器0开始计时
+  35   1      }
+  36          
+  37          void Timer0_IST(void) interrupt 1 //定时器0的中断标志位会自动清0
+  38          {
+  39   1         
+  40   1          TR0 = 0;
+  41   1          if(start_timer == 1)
+  42   1          {
+  43   2              recv_timer_cnt++; //1. 累加定时时间计数器
+  44   2              if(recv_timer_cnt > MAX_REV_TIM) //2.判断定时时间是否超过了设定的最大的阈值，
+  45   2                                               //超过则说明等待一段时间后没有新的数据到，
+  46   2                                               //我们就判断一包数据接收完了
+  47   2              {
+  48   3                  recv_timer_cnt=0;      //3.清楚定时计数器，处理数据，清除buffer(放到数据处理之后）
+  49   3                  recv_cnt = 0;
+  50   3                  recv_flag = 1;  //接受完一包数据标志位
+  51   3              }
+  52   2          }
+  53   1          TL0 = 0x66;                         //设置定时初始值
+  54   1              TH0 = 0xFC;
+C51 COMPILER V9.54   MAIN                                                                  03/28/2023 20:28:41 PAGE 2   
+
+  55   1          TR0 = 1;
+  56   1          
+  57   1      }
+  58          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    115    ----
+   CONSTANT SIZE    =     69    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

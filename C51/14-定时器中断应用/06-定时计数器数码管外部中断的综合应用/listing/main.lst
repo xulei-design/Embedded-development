@@ -1,0 +1,124 @@
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 23:43:32 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(..\listi
+                    -ng\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"display.h"     
+   3          
+   4          unsigned char DIS_u();
+   5          void DIS_Service();
+   6          void Timer0Init(void);
+   7          void EX0_Init();
+   8          void EX1_Init();
+   9          unsigned int numCnt = 0;//参数
+  10          unsigned char temp0;
+  11          unsigned char temp1;
+  12          unsigned char temp2;
+  13          unsigned char temp3;
+  14          void main()
+  15          {
+  16   1              Timer0Init();
+  17   1              EX0_Init();
+  18   1              EX1_Init();
+  19   1              EA = 1;  //中断总开关
+  20   1              while(1)
+  21   1              {
+  22   2                      DIS_Service();
+  23   2              }
+  24   1      
+  25   1      }
+  26          
+  27          void DIS_Service()
+  28          {
+  29   1              temp0 = numCnt/1000;
+  30   1              temp1 = numCnt/100%10;
+  31   1              temp2 = numCnt/10%10;
+  32   1              temp3 = numCnt%10;
+  33   1              if(numCnt < 1000)
+  34   1                      LEDBuf[0]=22;
+  35   1              else
+  36   1                      LEDBuf[0]=temp0;
+  37   1              if(numCnt < 100)
+  38   1                      LEDBuf[1]=22;
+  39   1              else
+  40   1                      LEDBuf[1]=temp1;
+  41   1              if(numCnt < 10)
+  42   1                      LEDBuf[2]=22;
+  43   1              else
+  44   1                      LEDBuf[2]=temp2;
+  45   1                      LEDBuf[3]=temp3;
+  46   1      
+  47   1      }
+  48          void Timer0Init(void)           //1毫秒@11.0592MHz
+  49          {
+  50   1      
+  51   1              TMOD &= 0xF0;           //设置定时器模式
+  52   1              TL0 = 0x66;             //设置定时初值
+  53   1              TH0 = 0xFC;             //设置定时初值
+  54   1              TF0 = 0;                //清除TF0标志
+C51 COMPILER V9.01   MAIN                                                                  02/20/2023 23:43:32 PAGE 2   
+
+  55   1              TR0 = 1;                //定时器0开始计时
+  56   1              ET0 = 1;
+  57   1      
+  58   1      }
+  59          
+  60          void EX0_Init()
+  61          {
+  62   1              IT0 = 1;  //触发方式，下降沿
+  63   1              EX0 = 1;  //打开外部中断
+  64   1              
+  65   1      }
+  66          
+  67          void EX1_Init()
+  68          {
+  69   1              IT1 = 1;  //触发方式，下降沿
+  70   1              EX1 = 1;  //打开外部中断
+  71   1              
+  72   1      }
+  73          void timer0_ISR(void) interrupt 1       //定时器T0中断服务函数
+  74          {
+  75   1              TR0 = 0;
+  76   1              Display();
+  77   1              TL0 = 0x66;             //设置定时初值
+  78   1              TH0 = 0xFC;
+  79   1              TR0 = 1;
+  80   1      }
+  81          
+  82          void EX0_ISR(void) interrupt 0     //外部中断的0的服务函数
+  83          {
+  84   1              EX0 = 0;
+  85   1              numCnt++;
+  86   1              if(numCnt>9999)
+  87   1                      numCnt = 0;
+  88   1              EX0 = 1;        
+  89   1      }
+  90          void EX1_ISR(void) interrupt 2     //外部中断的1的服务函数
+  91          {
+  92   1              EX1 = 0;
+  93   1              numCnt--;
+  94   1              if(numCnt > 10000)
+  95   1                      numCnt = 9999;
+  96   1              EX1 = 1;                
+  97   1              
+  98   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    312    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

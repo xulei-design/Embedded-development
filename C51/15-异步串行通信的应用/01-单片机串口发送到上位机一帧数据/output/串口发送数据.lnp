@@ -1,0 +1,4 @@
+"..\output\main.obj",
+"..\output\delay.obj" 
+TO "..\output\串口发送数据" 
+PRINT("..\listing\串口发送数据.m51") RAMSIZE(256) 

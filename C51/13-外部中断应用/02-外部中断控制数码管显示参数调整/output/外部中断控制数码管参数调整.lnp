@@ -1,0 +1,5 @@
+"..\output\main.obj",
+"..\output\delay.obj",
+"..\output\display.obj" 
+TO "..\output\外部中断控制数码管参数调整" 
+PRINT("..\listing\外部中断控制数码管参数调整.m51")

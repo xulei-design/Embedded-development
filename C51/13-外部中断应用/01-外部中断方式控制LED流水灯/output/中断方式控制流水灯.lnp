@@ -1,0 +1,5 @@
+"..\output\main.obj",
+"..\output\key.obj",
+"..\output\delay.obj" 
+TO "..\output\中断方式控制流水灯" 
+PRINT("..\listing\中断方式控制流水灯.m51")

@@ -1,0 +1,7 @@
+"..\output\delay.obj",
+"..\output\key.obj",
+"..\output\LCD1602.obj",
+"..\output\LCDShowMenu.obj",
+"..\output\main.obj" 
+TO "..\output\1602自动巡检方式显示16路温度数据" 
+PRINT("..\listing\1602自动巡检方式显示16路温度数据.m51") RAMSIZE(256) 

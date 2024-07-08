@@ -1,0 +1,3 @@
+"..\output\main.obj" 
+TO "..\output\PWM脉冲宽度调制" 
+PRINT("..\listing\PWM脉冲宽度调制.m51")

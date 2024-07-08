@@ -1,0 +1,105 @@
+C51 COMPILER V9.54   MAIN                                                                  05/07/2023 23:09:25 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "LCD1602.h"
+   3          #include "delay.h"
+   4          #include "OneWire.h"
+   5          #include "DS18B20.h"
+   6          #include "LCDShowMenu.h"
+   7          
+   8          void LCDShowService();
+   9          void Timer0_Init(void);
+  10          int TEMPbuf[] = {125,126,127,128};
+  11          unsigned char menu = 0;
+  12          unsigned char menuflag;
+  13          
+  14          void main()
+  15          {
+  16   1          LCDInit();
+  17   1          delayxms(10);
+  18   1          StartMenu();
+  19   1          delayxms(2000);
+  20   1          Timer0_Init();
+  21   1          Start18B20();
+  22   1          LCDWriteCmd(LCD_SCREEN_CLR);
+  23   1          while(1)
+  24   1          { 
+  25   2              
+  26   2              
+  27   2              if(menuflag == 1)
+  28   2              {
+  29   3                  menuflag = 0;
+  30   3                  menu++;
+  31   3                  if(menu == 2)
+  32   3                      menu = 0;
+  33   3                  Get18B20Temp(TEMPbuf,1);
+  34   3                  Get18B20Temp(TEMPbuf+1,2);
+  35   3                  Get18B20Temp(TEMPbuf+2,3);
+  36   3                  Get18B20Temp(TEMPbuf+3,4);
+  37   3              }
+  38   2              LCDShowService();
+  39   2          }
+  40   1      }
+  41          
+  42          void Timer0_Init(void)          //1毫秒@11.0592MHz
+  43          {
+  44   1              //AUXR &= 0x7F;                 //定时器时钟12T模式
+  45   1              TMOD &= 0xF0;                   //设置定时器模式
+  46   1          TMOD |= 0x01;
+  47   1              TL0 = 0x66;                             //设置定时初始值
+  48   1              TH0 = 0xFC;                             //设置定时初始值
+  49   1              TF0 = 0;                                //清除TF0标志
+  50   1          ET0 = 1;
+  51   1          EA = 1;
+  52   1              TR0 = 1;                                //定时器0开始计时
+  53   1          
+  54   1      }
+C51 COMPILER V9.54   MAIN                                                                  05/07/2023 23:09:25 PAGE 2   
+
+  55          
+  56          void Timer0_ISR() interrupt 1
+  57          {
+  58   1          static unsigned int timer0cnt = 0;
+  59   1          TR0 = 0;
+  60   1          timer0cnt++;
+  61   1          if(timer0cnt >= 3000)
+  62   1          {
+  63   2              timer0cnt = 0;
+  64   2              menuflag = 1;
+  65   2          }
+  66   1          TL0 = 0x66;                         //设置定时初始值
+  67   1              TH0 = 0xFC;                             //设置定时初始值
+  68   1          TR0 = 1;
+  69   1      }
+  70          void LCDShowService()
+  71          {
+  72   1          switch(menu)
+  73   1          {
+  74   2              case 0:  SubmenuOne(); break;
+  75   2              case 1:  SubmenuTwo(); break;
+  76   2              default: break;
+  77   2              
+  78   2          }
+  79   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    179    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

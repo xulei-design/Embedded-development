@@ -1,0 +1,4 @@
+"..\output\main.obj",
+"..\output\display.obj" 
+TO "..\output\Cnt" 
+PRINT("..\listing\Cnt.m51")

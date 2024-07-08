@@ -1,0 +1,58 @@
+C51 COMPILER V9.01   MAIN                                                                  02/16/2023 23:24:48 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.obj
+COMPILER INVOKED BY: E:\keil\keil\keil install\C51\BIN\C51.EXE ..\source\main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\main.l
+                    -st) OBJECT(.\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"display.h"     
+   3          
+   4          
+   5          void Timer0Init();
+   6          void main()
+   7          {
+   8   1              Timer0Init();
+   9   1              while(1);
+  10   1      }
+  11          
+  12          
+  13          void Timer0Init(void)           //1毫秒@12.000MHz
+  14          {
+  15   1      
+  16   1              TMOD &= 0xF0;           //设置定时器模式
+  17   1              TL0 = 0x20;             //设置定时初值
+  18   1              TH0 = 0xD1;             //设置定时初值
+  19   1              TF0 = 0;                //清除TF0标志
+  20   1              ET0 = 1;
+  21   1              EA = 1;
+  22   1              TR0 = 1;                //定时器0开始计时
+  23   1      }
+  24          
+  25          
+  26          void timer0_ISR() interrupt 1
+  27          {
+  28   1      
+  29   1              TR0 = 0;
+  30   1              Display(); //刷新数码管
+  31   1              TL0 = 0x20;             //设置定时初值
+  32   1              TH0 = 0xD1;
+  33   1              TR0 = 1;
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     92    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

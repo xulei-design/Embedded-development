@@ -1,0 +1,141 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/23/2023  21:08:37  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL\KEIL5\KEIL5 INSTALL\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\delay.obj TO .\Objects\printf串口输出重定向实
+>> 现 PRINT (.\Listings\printf串口输出重定向实现.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\delay.obj (DELAY)
+  E:\KEIL\KEIL5\KEIL5 INSTALL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\printf串口输出重定向实现 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0020H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     07DAH                  *** GAP ***
+            CODE    0800H     001EH     UNIT         ?PR?_DELAYXMS?DELAY
+            CODE    081EH     0018H     UNIT         ?PR?UARTINIT?MAIN
+            CODE    0836H     000FH     UNIT         ?PR?MAIN?MAIN
+            CODE    0845H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0851H     0006H     UNIT         ?PR?ES_ISR?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\printf串口输出重定向实现 (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?UARTINIT?MAIN
+  +--> ?PR?_DELAYXMS?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\printf串口输出重定向实现 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  21:08:37  PAGE 2
+
+
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00A8H.7       PUBLIC        EA
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.1       PUBLIC        TI
+  C:0836H         PUBLIC        main
+  D:0099H         PUBLIC        SBUF
+  D:0098H         PUBLIC        SCON
+  C:081EH         PUBLIC        UartInit
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.3       PUBLIC        ET1
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  B:0088H.6       PUBLIC        TR1
+  C:0851H         PUBLIC        ES_ISR
+  -------         PROC          MAIN
+  C:0836H         LINE#         5
+  C:0836H         LINE#         6
+  C:0836H         LINE#         7
+  C:0839H         LINE#         8
+  C:0839H         LINE#         9
+  C:0839H         LINE#         10
+  C:083CH         LINE#         11
+  C:0843H         LINE#         12
+  -------         ENDPROC       MAIN
+  -------         PROC          UARTINIT
+  C:081EH         LINE#         15
+  C:081EH         LINE#         16
+  C:081EH         LINE#         17
+  C:0821H         LINE#         18
+  C:0824H         LINE#         19
+  C:0827H         LINE#         20
+  C:082AH         LINE#         21
+  C:082DH         LINE#         22
+  C:082FH         LINE#         23
+  C:0831H         LINE#         24
+  C:0833H         LINE#         25
+  C:0835H         LINE#         26
+  -------         ENDPROC       UARTINIT
+  -------         PROC          ES_ISR
+  C:0851H         LINE#         28
+  C:0851H         LINE#         30
+  C:0854H         LINE#         31
+  C:0854H         LINE#         32
+  C:0856H         LINE#         33
+  C:0856H         LINE#         34
+  -------         ENDPROC       ES_ISR
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0800H         PUBLIC        _delayxms
+  -------         PROC          _DELAYXMS
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  21:08:37  PAGE 3
+
+
+  C:0800H         LINE#         3
+  C:0800H         LINE#         4
+  C:0800H         LINE#         6
+  C:0809H         LINE#         7
+  C:0809H         LINE#         8
+  C:080DH         LINE#         9
+  C:0816H         LINE#         10
+  C:081DH         LINE#         11
+  -------         ENDPROC       _DELAYXMS
+  -------         ENDMOD        DELAY
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 004EH BYTE ( 3%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=93
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

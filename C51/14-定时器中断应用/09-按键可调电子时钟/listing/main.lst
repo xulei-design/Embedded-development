@@ -1,0 +1,197 @@
+C51 COMPILER V9.54   MAIN                                                                  02/23/2023 10:54:56 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"display.h"
+   3          
+   4          
+   5          unsigned char timerCnt;
+   6          unsigned char sec = 10;
+   7          unsigned char min = 59;
+   8          unsigned char hour;
+   9          unsigned char state=0;
+  10          void Timer0Init(void);
+  11          void Timer1Init(void);
+  12          void EX0_Iint();
+  13          void EX1_Iint();
+  14          void DIS_ISR();
+  15          void DIS_Sec();
+  16          void DIS_Min();
+  17          void DIS_Hour();
+  18          void main()
+  19          {
+  20   1              Timer0Init();
+  21   1              Timer1Init();
+  22   1              EX0_Iint();
+  23   1              EX1_Iint();
+  24   1              EA = 1;
+  25   1              while(1)
+  26   1              {
+  27   2                      switch(state)
+  28   2                      {
+  29   3                              case 0: TR0 = 1; DIS_ISR(); break; //正常时钟状态
+  30   3                              case 1: DIS_Sec(); break; //调秒
+  31   3                              case 2: DIS_Min(); break; //调分
+  32   3                              case 3: DIS_Hour();break; //调时
+  33   3                              default : break;
+  34   3                      }
+  35   2              }
+  36   1      }
+  37          
+  38          void DIS_ISR()
+  39          {
+  40   1              LEDBuf[0] = hour/10;
+  41   1              LEDBuf[1] = hour%10;
+  42   1              LEDBuf[2] = min/10;
+  43   1              LEDBuf[3] = min%10;
+  44   1      }
+  45          void DIS_Min()
+  46          {
+  47   1              LEDBuf[0] = min/10;
+  48   1              LEDBuf[1] = min%10;
+  49   1              LEDBuf[2] = 23;
+  50   1              LEDBuf[3] = 23;
+  51   1      }
+  52          void DIS_Sec()
+  53          {
+  54   1              LEDBuf[0] = 23;
+C51 COMPILER V9.54   MAIN                                                                  02/23/2023 10:54:56 PAGE 2   
+
+  55   1              LEDBuf[1] = 23;
+  56   1              LEDBuf[2] = sec/10;
+  57   1              LEDBuf[3] = sec%10;
+  58   1      }
+  59          
+  60          void DIS_Hour()
+  61          {
+  62   1              LEDBuf[0] = hour/10;
+  63   1              LEDBuf[1] = hour%10;
+  64   1              LEDBuf[2] = 22;
+  65   1          LEDBuf[3] = 22;
+  66   1      }
+  67          
+  68          void Timer0Init(void)           //50毫秒@12.000MHz
+  69          {
+  70   1              TMOD &= 0xF0;           //设置定时器模式
+  71   1              TMOD |= 0x01;
+  72   1              TL0 = 0xB0;             //设置定时初值
+  73   1              TH0 = 0x3C;             //设置定时初值
+  74   1              TF0 = 0;                //清除TF0标志                   
+  75   1              ET0 = 1;
+  76   1      
+  77   1      }
+  78          void Timer1Init(void)           //1毫秒@12.000MHz
+  79          {
+  80   1          TMOD &= 0x0F;               //设置定时器模式
+  81   1              TMOD |= 0x01;
+  82   1              TL1 = 0x18;             //设置定时初值
+  83   1              TH1 = 0xFC;             //设置定时初值
+  84   1              TF1 = 0;                //清除TF1标志
+  85   1              TR1 = 1;                //定时器1开始计时
+  86   1              ET1 = 1;
+  87   1      
+  88   1      }
+  89          
+  90          void EX0_Iint()  //外部中断0
+  91          {
+  92   1              IT0 = 1;
+  93   1              EX0 = 1;
+  94   1      }
+  95          void EX1_Iint()  //外部中断1
+  96          {
+  97   1              IT1 = 1;
+  98   1              EX1 = 1;
+  99   1      }
+ 100          void EX0_ISR(void) interrupt 0   // 外部中断0调节状态
+ 101          {
+ 102   1              TR0 = 0; //一旦切换状态想进行调节时间时，就将计数时钟关掉
+ 103   1              state++;
+ 104   1              if(state>3)
+ 105   1                      state = 0;              
+ 106   1      }
+ 107          
+ 108          void timer0_ISR(void) interrupt 1
+ 109          {
+ 110   1              TR0 = 0;
+ 111   1              timerCnt++;
+ 112   1              if(timerCnt>=20) //1s钟到
+ 113   1              {
+ 114   2                      timerCnt=0;
+ 115   2                      sec++;
+ 116   2                      if(sec>=60)
+C51 COMPILER V9.54   MAIN                                                                  02/23/2023 10:54:56 PAGE 3   
+
+ 117   2                      {
+ 118   3                              sec = 0;
+ 119   3                              min++;
+ 120   3                              if(min>=60)
+ 121   3                              {
+ 122   4                                      min=0;
+ 123   4                                      hour++;
+ 124   4                                      if(hour >= 24)
+ 125   4                                      {
+ 126   5                                              hour = 0;
+ 127   5                                      }
+ 128   4                              }
+ 129   3                      }
+ 130   2              }
+ 131   1              TL0 = 0xB0;             //设置定时初值
+ 132   1              TH0 = 0x3C;
+ 133   1              TR0 = 1;
+ 134   1      }
+ 135          void EX1_ISR(void) interrupt 2   // 外部中断1调节状态
+ 136          {
+ 137   1              switch(state)
+ 138   1              {
+ 139   2                      case 0: break;
+ 140   2                      case 1: 
+ 141   2                              sec++; 
+ 142   2                              if(sec>=60) 
+ 143   2                                      sec=0;
+ 144   2                      break;
+ 145   2                      case 2:
+ 146   2                              
+ 147   2                              min++; 
+ 148   2                              if(min>=60) 
+ 149   2                                      min=0;
+ 150   2                      break;
+ 151   2                      case 3:
+ 152   2                              hour++;
+ 153   2                              if(hour>=24)
+ 154   2                                      hour = 0;
+ 155   2                      break;
+ 156   2                      default : break;
+ 157   2              }       
+ 158   1      }
+ 159          void timer1_ISR(void) interrupt 3  //定时器1显示刷新
+ 160          {
+ 161   1              TR1 = 0;
+ 162   1              Display();
+ 163   1              TL1 = 0x18;             //设置定时初值
+ 164   1              TH1 = 0xFC;
+ 165   1              TR1 = 1;        
+ 166   1      }
+ 167             
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    422    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.54   MAIN                                                                  02/23/2023 10:54:56 PAGE 4   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

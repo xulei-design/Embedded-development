@@ -1,0 +1,5 @@
+"..\output\delay.obj",
+"..\output\LCD1602.obj",
+"..\output\main.obj" 
+TO "..\output\1602" 
+PRINT("..\listing\1602.m51") RAMSIZE(256) 

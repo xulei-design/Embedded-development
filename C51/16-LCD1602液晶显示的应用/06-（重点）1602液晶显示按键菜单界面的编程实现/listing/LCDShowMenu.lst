@@ -1,0 +1,94 @@
+C51 COMPILER V9.54   LCDSHOWMENU                                                           04/20/2023 16:51:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCDSHOWMENU
+OBJECT MODULE PLACED IN ..\output\LCDShowMenu.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\LCDShowMenu.c OPTIMIZE(8,SPEED) BROWSE DEBUG 
+                    -OBJECTEXTEND PRINT(..\listing\LCDShowMenu.lst) OBJECT(..\output\LCDShowMenu.obj)
+
+line level    source
+
+   1          #include "LCDShowMenu.h"
+   2          
+   3          int TEMPbuf[]= {125,126,127,128,223,224,225,226,334,335,336,337,421,422,423,424};
+   4          
+   5          void StartMenu()
+   6          {
+   7   1          LCDShowStr(0,0,"The DAS of TEMP");
+   8   1          LCDShowStr(6,1,"V1.0");
+   9   1      }
+  10          
+  11          void SubmenuOne()
+  12          {
+  13   1          LCDShowStr(0,0,"CH0:");
+  14   1          ShowTempData(4,0,TEMPbuf,0);
+  15   1          LCDShowStr(0,1,"CH1:");
+  16   1          ShowTempData(4,1,TEMPbuf,1);
+  17   1          LCDShowStr(8,0,"CH2:"); 
+  18   1          ShowTempData(12,0,TEMPbuf,2);
+  19   1          LCDShowStr(8,1,"CH3:");
+  20   1          ShowTempData(12,1,TEMPbuf,3);
+  21   1      }
+  22          void SubmenuTwo()
+  23          {
+  24   1          LCDShowStr(0,0,"CH4:");
+  25   1          ShowTempData(4,0,TEMPbuf,4);
+  26   1          LCDShowStr(0,1,"CH5:");
+  27   1          ShowTempData(4,1,TEMPbuf,5);
+  28   1          LCDShowStr(8,0,"CH6:");
+  29   1          ShowTempData(12,0,TEMPbuf,6);
+  30   1          LCDShowStr(8,1,"CH7:");
+  31   1          ShowTempData(12,1,TEMPbuf,7);
+  32   1      }
+  33          
+  34          void SubmenuThree()
+  35          {
+  36   1          LCDShowStr(0,0,"CH8:");
+  37   1          ShowTempData(4,0,TEMPbuf,8);
+  38   1          LCDShowStr(0,1,"CH9:");
+  39   1          ShowTempData(4,1,TEMPbuf,9);
+  40   1          LCDShowStr(8,0,"CHa:");
+  41   1          ShowTempData(12,0,TEMPbuf,10);
+  42   1          LCDShowStr(8,1,"CHb:");
+  43   1          ShowTempData(12,1,TEMPbuf,11);
+  44   1      }
+  45          void SubmenuFour()
+  46          {
+  47   1          LCDShowStr(0,0,"CHc:");
+  48   1          ShowTempData(4,0,TEMPbuf,12);
+  49   1          LCDShowStr(0,1,"CHd:");
+  50   1          ShowTempData(4,1,TEMPbuf,13);
+  51   1          LCDShowStr(8,0,"CHe:");
+  52   1          ShowTempData(12,0,TEMPbuf,14);
+  53   1          LCDShowStr(8,1,"CHf:");
+  54   1          ShowTempData(12,1,TEMPbuf,15);
+C51 COMPILER V9.54   LCDSHOWMENU                                                           04/20/2023 16:51:36 PAGE 2   
+
+  55   1      }
+  56          
+  57          void AlarmSetMenu()
+  58          {
+  59   1          LCDShowStr(0,0,"   ALARM MENU");
+  60   1      }
+  61          void ShowTempData(unsigned char x,unsigned char y, int *buf,unsigned char index)
+  62          {
+  63   1          LCDSetPosition(x,y);
+  64   1          LCDWriteData(*(buf+index)/100+'0');
+  65   1          LCDWriteData(*(buf+index)/10%10+'0');
+  66   1          LCDWriteData('.');
+  67   1          LCDWriteData(*(buf+index)%10+'0');
+  68   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    616    ----
+   CONSTANT SIZE    =    115    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     32       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

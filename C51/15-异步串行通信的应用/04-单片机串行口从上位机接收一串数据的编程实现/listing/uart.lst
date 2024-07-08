@@ -1,0 +1,101 @@
+C51 COMPILER V9.54   UART                                                                  03/06/2023 06:11:41 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN ..\output\uart.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(..\listing\uart.lst) OBJECT(..\output\uart.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          
+   3          
+   4          unsigned char recv_buf[MAX_REV_NUM]; //接收缓冲
+   5          unsigned char recv_flag = 0; //接收完一串数据的数据标志位，全局变量
+   6          unsigned char recv_length;
+   7          void UartInit(void)             //9600bps@11.0592MHz
+   8          {
+   9   1              SCON = 0x50;            //8位数据,可变波特率
+  10   1              TMOD &= 0x0F;           //清除定时器1模式位
+  11   1              TMOD |= 0x20;           //设定定时器1为8位自动重装方式
+  12   1              TL1 = 0xFD;             //设定定时初值
+  13   1              TH1 = 0xFD;             //设定定时器重装值
+  14   1              ET1 = 0;                //禁止定时器1中断
+  15   1              TR1 = 1;                //启动定时器1
+  16   1          ES = 1;         //串行中断打开
+  17   1          EA = 1;
+  18   1      }
+  19          
+  20          void sendByte(unsigned char dat)
+  21          {
+  22   1              SBUF = dat;
+  23   1              while(!TI);  //发送等待，发送完成，将发送中断位清0
+  24   1                      TI = 0;
+  25   1      }
+  26          
+  27          void sendString(unsigned char *dat) //只需传递首地址
+  28          {
+  29   1         while(*dat != '\0')
+  30   1         {
+  31   2              sendByte(*(dat++)); //*dat代表的是首地址 *dat = &dat
+  32   2         }       
+  33   1      }
+  34          
+  35          char putchar(char c) //c语言中是打印到屏幕，现在让它打印到串口，定向到串口
+  36          //printf重定向
+  37          {
+  38   1          sendByte(c);
+  39   1          return c;
+  40   1      }
+  41          
+  42          void uart_ISR(void) interrupt 4 //串行口中断服务函数
+  43          //计算机发送一帧数据通过com3口传递到com2口，然后通过com2传递给单片机，
+  44          //当单片机接收完这一帧数据时，接收中断RI会置1，进入到中断函数中对数据进行处理，
+  45          {
+  46   1          static unsigned char recv_cnt = 0;
+  47   1          unsigned char temp;
+  48   1          if(RI)
+  49   1          {
+  50   2              RI = 0;
+  51   2              temp = SBUF;
+  52   2              if(temp != 0x0D)  //以回车符为结束符，回车符的ASCII码值为0x0d
+  53   2              {
+  54   3                  recv_buf[recv_cnt] = temp; //数据只能一帧一帧的传递
+C51 COMPILER V9.54   UART                                                                  03/06/2023 06:11:41 PAGE 2   
+
+  55   3                  recv_cnt++;
+  56   3                  if(recv_cnt > MAX_REV_NUM)
+  57   3                  {
+  58   4                     recv_cnt =  MAX_REV_NUM;
+  59   4                  }
+  60   3              }
+  61   2              else
+  62   2              {
+  63   3                 recv_flag = 1;
+  64   3                 recv_length =  recv_cnt; //接收的字符长度
+  65   3                 recv_cnt = 0;
+  66   3              }
+  67   2             
+  68   2          }
+  69   1          if(TI)
+  70   1          {
+  71   2              TI = 0;
+  72   2          }
+  73   1      }
+  74          
+  75          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    142    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     16       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

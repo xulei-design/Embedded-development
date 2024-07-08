@@ -1,0 +1,97 @@
+C51 COMPILER V9.54   ONEWIRE                                                               04/23/2023 20:20:39 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ONEWIRE
+OBJECT MODULE PLACED IN ..\output\OneWire.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\OneWire.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJE
+                    -CTEXTEND PRINT(..\listing\OneWire.lst) OBJECT(..\output\OneWire.obj)
+
+line level    source
+
+   1          #include "OneWire.h"
+   2          
+   3          
+   4          
+   5          
+   6          
+   7          bit OneWireRst()
+   8          {
+   9   1          bit ack;
+  10   1          EA = 0;
+  11   1          DS18B20 = 0; //拉低总线，发复位脉冲
+  12   1          Delay600us(); //480us-960us，取600us
+  13   1          DS18B20 = 1; //释放总线
+  14   1          Delay60us(); //15-60us,取60us
+  15   1          ack = DS18B20; //读取I/O口，读取18B20
+  16   1          while(!DS18B20); //等待18B20释放总线，等待存在脉冲结束，才能进入下一步
+  17   1          EA = 1;
+  18   1          return ack;
+  19   1          
+  20   1      }
+  21          void WriteOneWire(unsigned char dat)
+  22          {
+  23   1          unsigned char tmp;
+  24   1          EA = 0;
+  25   1          for(tmp = 0x01; tmp!=0; tmp<<=1)
+  26   1          {
+  27   2              DS18B20 = 0; //拉低总线
+  28   2              _nop_();  //执行一个nop指令1us
+  29   2              _nop_(); //延时2us判断写0/1
+  30   2              if(dat & tmp == 0)  //dat&tmp相当于取最低位，此时写0
+  31   2              {
+  32   3                  DS18B20 = 0;
+  33   3                  Delay60us();
+  34   3                  DS18B20 = 1;
+  35   3              }
+  36   2              else   //写1
+  37   2              {
+  38   3                  DS18B20 = 1;
+  39   3                  Delay60us();
+  40   3                  DS18B20 = 1;
+  41   3              }
+  42   2      
+  43   2          }
+  44   1          EA = 1;
+  45   1      }
+  46          
+  47          unsigned char ReadOneWire()
+  48          {
+  49   1          
+  50   1          unsigned char dat;
+  51   1          unsigned char tmp;
+  52   1          EA = 0;
+  53   1          for(tmp = 0x01;tmp !=0;tmp<<=1)
+  54   1          {
+C51 COMPILER V9.54   ONEWIRE                                                               04/23/2023 20:20:39 PAGE 2   
+
+  55   2              DS18B20 = 0;
+  56   2              _nop_();
+  57   2              _nop_();
+  58   2              DS18B20 = 1;
+  59   2              _nop_();
+  60   2              _nop_();
+  61   2              if(!DS18B20)   
+  62   2                  dat &= ~tmp; //某位与0与，任何结果这位都是0，保存这位结果
+  63   2              else
+  64   2                  dat |= tmp; //某位与1或，任何结果这位都是1，保存这位结果
+  65   2              Delay60us();
+  66   2          }
+  67   1          EA = 1;
+  68   1          return dat;
+  69   1          
+  70   1      }
+  71          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    119    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

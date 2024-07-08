@@ -1,0 +1,276 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/23/2023  01:54:34  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL\KEIL5\KEIL5 INSTALL\C51\BIN\BL51.EXE ..\output\delay.obj, ..\output\display.obj, ..\output\key.obj, ..\output\ma
+>> in.obj TO ..\output\矩阵按键外部中断方式按键识别 PRINT (..\listing\矩阵按键外部中断方式按键识别.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\output\delay.obj (DELAY)
+  ..\output\display.obj (DISPLAY)
+  ..\output\key.obj (KEY)
+  ..\output\main.obj (MAIN)
+  E:\KEIL\KEIL5\KEIL5 INSTALL\C51\LIB\C51S.LIB (?C_STARTUP)
+  E:\KEIL\KEIL5\KEIL5 INSTALL\C51\LIB\C51S.LIB (?C?CCASE)
+  E:\KEIL\KEIL5\KEIL5 INSTALL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  ..\output\矩阵按键外部中断方式按键识别 (DELAY)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         ?DT?DISPLAY
+            DATA    000DH     0004H     UNIT         ?DT?MAIN
+            DATA    0011H     0003H     UNIT         _DATA_GROUP_
+            IDATA   0014H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     07FAH                  *** GAP ***
+            CODE    0800H     00B7H     UNIT         ?PR?KEY_SCAN?KEY
+            CODE    08B7H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0943H     0061H     UNIT         ?PR?DISPLAY?DISPLAY
+            CODE    09A4H     0026H     UNIT         ?C?LIB_CODE
+            CODE    09CAH     001EH     UNIT         ?PR?_DELAYXMS?DELAY
+            CODE    09E8H     001CH     UNIT         ?CO?DISPLAY
+            CODE    0A04H     001BH     UNIT         ?PR?MAIN?MAIN
+            CODE    0A1FH     0011H     UNIT         ?C_INITSEG
+            CODE    0A30H     000DH     UNIT         ?PR?DIS_SERVICE?MAIN
+            CODE    0A3DH     0007H     UNIT         ?PR?EX0_INIT?MAIN
+            CODE    0A44H     0004H     UNIT         ?PR?EX0_ISR?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   ..\output\矩阵按键外部中断方式按键识别 (DELAY)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  01:54:34  PAGE 2
+
+
+
+?PR?MAIN?MAIN                  -----    -----
+  +--> ?PR?EX0_INIT?MAIN
+  +--> ?PR?KEY_SCAN?KEY
+  +--> ?PR?DIS_SERVICE?MAIN
+  +--> ?PR?DISPLAY?DISPLAY
+
+?PR?KEY_SCAN?KEY               0011H    0003H
+  +--> ?PR?_DELAYXMS?DELAY
+
+?PR?DISPLAY?DISPLAY            -----    -----
+  +--> ?CO?DISPLAY
+  +--> ?PR?_DELAYXMS?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  ..\output\矩阵按键外部中断方式按键识别 (DELAY)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:09CAH         PUBLIC        _Delayxms
+  -------         PROC          _DELAYXMS
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:09CAH         LINE#         3
+  C:09CAH         LINE#         4
+  C:09CAH         LINE#         6
+  C:09D3H         LINE#         7
+  C:09D3H         LINE#         8
+  C:09D7H         LINE#         9
+  C:09E0H         LINE#         10
+  C:09E7H         LINE#         11
+  -------         ENDPROC       _DELAYXMS
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        DISPLAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  C:09E8H         PUBLIC        leddata
+  C:0943H         PUBLIC        Display
+  C:0A00H         PUBLIC        PLACE_CODE
+  D:0009H         PUBLIC        LEDBuf
+  -------         PROC          DISPLAY
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:0943H         LINE#         36
+  C:0943H         LINE#         37
+  C:0943H         LINE#         39
+  C:0952H         LINE#         40
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  01:54:34  PAGE 3
+
+
+  C:0952H         LINE#         41
+  C:0952H         LINE#         42
+  C:095AH         LINE#         43
+  C:095DH         LINE#         44
+  C:095DH         LINE#         45
+  C:095DH         LINE#         46
+  C:095DH         LINE#         47
+  C:095FH         LINE#         48
+  C:095FH         LINE#         49
+  C:0967H         LINE#         50
+  C:096AH         LINE#         51
+  C:096AH         LINE#         52
+  C:096AH         LINE#         53
+  C:096AH         LINE#         54
+  C:096CH         LINE#         55
+  C:096CH         LINE#         56
+  C:0974H         LINE#         57
+  C:097BH         LINE#         58
+  C:0982H         LINE#         59
+  C:0985H         LINE#         60
+  C:0987H         LINE#         61
+  C:0988H         LINE#         62
+  C:0988H         LINE#         63
+  C:0990H         LINE#         64
+  C:0997H         LINE#         65
+  C:099EH         LINE#         66
+  C:09A1H         LINE#         67
+  C:09A3H         LINE#         68
+  C:09A3H         LINE#         69
+  C:09A3H         LINE#         70
+  C:09A3H         LINE#         72
+  -------         ENDPROC       DISPLAY
+  -------         ENDMOD        DISPLAY
+
+  -------         MODULE        KEY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  C:0800H         PUBLIC        Key_Scan
+  -------         PROC          KEY_SCAN
+  -------         DO            
+  D:0011H         SYMBOL        temp1
+  D:0012H         SYMBOL        temp2
+  D:0013H         SYMBOL        KeyNum
+  -------         ENDDO         
+  C:0800H         LINE#         5
+  C:0800H         LINE#         6
+  C:0800H         LINE#         8
+  C:0803H         LINE#         9
+  C:0806H         LINE#         10
+  C:0809H         LINE#         11
+  C:080FH         LINE#         12
+  C:080FH         LINE#         13
+  C:0816H         LINE#         14
+  C:081CH         LINE#         15
+  C:081CH         LINE#         16
+  C:0822H         LINE#         17
+  C:0825H         LINE#         18
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  01:54:34  PAGE 4
+
+
+  C:082BH         LINE#         19
+  C:082BH         LINE#         20
+  C:082BH         LINE#         21
+  C:0866H         LINE#         22
+  C:0866H         LINE#         23
+  C:086BH         LINE#         24
+  C:0870H         LINE#         25
+  C:0875H         LINE#         26
+  C:087AH         LINE#         27
+  C:087FH         LINE#         28
+  C:0884H         LINE#         29
+  C:0889H         LINE#         30
+  C:088EH         LINE#         31
+  C:0893H         LINE#         32
+  C:0898H         LINE#         33
+  C:089DH         LINE#         34
+  C:08A2H         LINE#         35
+  C:08A7H         LINE#         36
+  C:08ACH         LINE#         37
+  C:08B1H         LINE#         38
+  C:08B4H         LINE#         39
+  C:08B4H         LINE#         41
+  C:08B6H         LINE#         42
+  -------         ENDPROC       KEY_SCAN
+  -------         ENDMOD        KEY
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+  C:0A44H         PUBLIC        EX0_ISR
+  C:0A04H         PUBLIC        main
+  D:000DH         PUBLIC        KeyPressFlag
+  C:0A3DH         PUBLIC        EX0_Init
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  C:0A30H         PUBLIC        Dis_Service
+  D:000EH         PUBLIC        KeyNum
+  D:000FH         PUBLIC        pramater
+  -------         PROC          MAIN
+  C:0A04H         LINE#         12
+  C:0A04H         LINE#         13
+  C:0A04H         LINE#         14
+  C:0A07H         LINE#         15
+  C:0A0AH         LINE#         16
+  C:0A0AH         LINE#         17
+  C:0A0AH         LINE#         18
+  C:0A0FH         LINE#         19
+  C:0A0FH         LINE#         20
+  C:0A12H         LINE#         21
+  C:0A17H         LINE#         22
+  C:0A17H         LINE#         23
+  C:0A1AH         LINE#         24
+  C:0A1DH         LINE#         25
+  -------         ENDPROC       MAIN
+  -------         PROC          DIS_SERVICE
+  C:0A30H         LINE#         28
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/23/2023  01:54:34  PAGE 5
+
+
+  C:0A30H         LINE#         29
+  C:0A30H         LINE#         30
+  C:0A33H         LINE#         31
+  C:0A36H         LINE#         32
+  C:0A39H         LINE#         33
+  C:0A3CH         LINE#         34
+  -------         ENDPROC       DIS_SERVICE
+  -------         PROC          EX0_INIT
+  C:0A3DH         LINE#         36
+  C:0A3DH         LINE#         37
+  C:0A3DH         LINE#         38
+  C:0A3FH         LINE#         39
+  C:0A41H         LINE#         40
+  C:0A43H         LINE#         41
+  -------         ENDPROC       EX0_INIT
+  -------         PROC          EX0_ISR
+  C:0A44H         LINE#         43
+  C:0A44H         LINE#         45
+  C:0A47H         LINE#         46
+  -------         ENDPROC       EX0_ISR
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?CCASE
+  C:09A4H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0198H BYTE (19%) *
+******************************************************************************
+
+Program Size: data=21.0 xdata=0 code=590
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

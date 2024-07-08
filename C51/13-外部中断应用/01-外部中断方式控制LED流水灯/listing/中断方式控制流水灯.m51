@@ -1,0 +1,160 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/12/2023  18:22:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL\KEIL\KEIL INSTALL\C51\BIN\BL51.EXE ..\output\main.obj, ..\output\key.obj, ..\output\delay.obj TO ..\output\ÖÐ¶Ï·
+>> ½Ê½¿ØÖÆÁ÷Ë®µÆ PRINT (..\listing\ÖÐ¶Ï·½Ê½¿ØÖÆÁ÷Ë®µÆ.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\output\main.obj (MAIN)
+  ..\output\key.obj (KEY)
+  ..\output\delay.obj (DELAY)
+  E:\KEIL\KEIL\KEIL INSTALL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  ..\output\ÖÐ¶Ï·½Ê½¿ØÖÆÁ÷Ë®µÆ (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?KEY_SCAN?KEY
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+            CODE    0006H     0051H     UNIT         ?PR?KEY_SCAN?KEY
+            CODE    0057H     001EH     UNIT         ?PR?_DELAYXMS?DELAY
+            CODE    0075H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0081H     0007H     UNIT         ?PR?EX0_INIT?MAIN
+            CODE    0088H     0005H     UNIT         ?PR?MAIN?MAIN
+            CODE    008DH     0003H     UNIT         ?PR?EX0_ISR?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   ..\output\ÖÐ¶Ï·½Ê½¿ØÖÆÁ÷Ë®µÆ (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?EX0_INIT?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  ..\output\ÖÐ¶Ï·½Ê½¿ØÖÆÁ÷Ë®µÆ (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/12/2023  18:22:39  PAGE 2
+
+
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  B:00A8H.7       PUBLIC        EA
+  C:008DH         PUBLIC        EX0_ISR
+  C:0088H         PUBLIC        main
+  C:0081H         PUBLIC        EX0_Init
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:0090H.0       PUBLIC        LED
+  -------         PROC          MAIN
+  C:0088H         LINE#         5
+  C:0088H         LINE#         6
+  C:0088H         LINE#         7
+  C:008BH         LINE#         8
+  C:008BH         LINE#         9
+  C:008BH         LINE#         11
+  -------         ENDPROC       MAIN
+  -------         PROC          EX0_INIT
+  C:0081H         LINE#         14
+  C:0081H         LINE#         15
+  C:0081H         LINE#         17
+  C:0083H         LINE#         18
+  C:0087H         LINE#         19
+  -------         ENDPROC       EX0_INIT
+  -------         PROC          EX0_ISR
+  C:008DH         LINE#         29
+  C:008DH         LINE#         31
+  C:008FH         LINE#         32
+  -------         ENDPROC       EX0_ISR
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        KEY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B0H         PUBLIC        P3
+  C:0006H         PUBLIC        Key_Scan
+  B:00B0H.0       PUBLIC        KEY1
+  B:00B0H.1       PUBLIC        KEY2
+  B:00B0H.2       PUBLIC        KEY3
+  B:00B0H.3       PUBLIC        KEY4
+  -------         PROC          KEY_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        KeyNum
+  -------         ENDDO         
+  C:0006H         LINE#         5
+  C:0006H         LINE#         6
+  C:0006H         LINE#         7
+  C:0009H         LINE#         8
+  C:0011H         LINE#         44
+  C:001DH         LINE#         45
+  C:001DH         LINE#         46
+  C:0024H         LINE#         47
+  C:0030H         LINE#         48
+  C:0030H         LINE#         49
+  C:0033H         LINE#         50
+  C:0036H         LINE#         51
+  C:0039H         LINE#         52
+  C:003CH         LINE#         53
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/12/2023  18:22:39  PAGE 3
+
+
+  C:003FH         LINE#         54
+  C:0042H         LINE#         55
+  C:0045H         LINE#         56
+  C:0048H         LINE#         57
+  C:0048H         LINE#         58
+  C:0054H         LINE#         59
+  C:0054H         LINE#         60
+  C:0056H         LINE#         61
+  -------         ENDPROC       KEY_SCAN
+  -------         ENDMOD        KEY
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0057H         PUBLIC        _Delayxms
+  -------         PROC          _DELAYXMS
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0057H         LINE#         3
+  C:0057H         LINE#         4
+  C:0057H         LINE#         6
+  C:0060H         LINE#         7
+  C:0060H         LINE#         8
+  C:0064H         LINE#         9
+  C:006DH         LINE#         10
+  C:0074H         LINE#         11
+  -------         ENDPROC       _DELAYXMS
+  -------         ENDMOD        DELAY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?KEY_SCAN?KEY
+
+Program Size: data=10.0 xdata=0 code=144
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

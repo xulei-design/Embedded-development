@@ -1,0 +1,128 @@
+C51 COMPILER V9.54   LCDSHOWMENU                                                           05/07/2023 23:09:25 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCDSHOWMENU
+OBJECT MODULE PLACED IN ..\output\LCDShowMenu.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\LCDShowMenu.c OPTIMIZE(8,SPEED) BROWSE DEBUG 
+                    -OBJECTEXTEND PRINT(..\listing\LCDShowMenu.lst) OBJECT(..\output\LCDShowMenu.obj)
+
+line level    source
+
+   1          #include "LCDShowMenu.h"
+   2          
+   3          extern int TEMPbuf[];
+   4          
+   5          void StartMenu()
+   6          {
+   7   1          LCDShowStr(0,0,"The DAS of TEMP");
+   8   1          LCDShowStr(6,1,"V1.0");
+   9   1      }
+  10          
+  11          void SubmenuOne()
+  12          {
+  13   1          LCDShowStr(0,0,"CH0:");  //第一行 显示DS18B20 #1
+  14   1          ShowTempData(TEMPbuf,0);
+  15   1          LCDShowStr(0,1,"CH1:");  //第二行 显示DS18B20 #2
+  16   1          ShowTempData(TEMPbuf,1);
+  17   1          
+  18   1      }
+  19          void SubmenuTwo()
+  20          {
+  21   1          LCDShowStr(0,0,"CH2:"); //第二个界面第一行 显示DS18B20 #3
+  22   1          ShowTempData(TEMPbuf,2);
+  23   1          LCDShowStr(0,1,"CH3:"); //第二个界面第二行 显示DS18B20 #4
+  24   1          ShowTempData(TEMPbuf,3);
+  25   1      }
+  26          
+  27          
+  28          
+  29          void AlarmSetMenu()
+  30          {
+  31   1          LCDShowStr(0,0,"   ALARM MENU");
+  32   1      }
+  33          void ShowTempData(int *buf,unsigned char index)
+  34          {
+  35   1          int temp;
+  36   1          float tmp;
+  37   1          temp = buf[index]; //*(buf+index)
+  38   1          if(temp < 0) //当温度值为负数
+  39   1          {
+  40   2              if(index%2) //奇数
+  41   2                  LCDWriteCmd(0xC5); //写地址 C0表示初始地址第二行
+  42   2              else
+  43   2                  LCDWriteCmd(0x85); //写地址 80表示初始地址第一行
+  44   2              LCDWriteData('-'); //显示负
+  45   2              temp = ~temp; //补码存放，取反加一求原码
+  46   2              temp = temp+1;
+  47   2              tmp = temp;
+  48   2              temp = tmp*0.0625*100; //小数点后保留两位
+  49   2          }
+  50   1          else //温度为正数
+  51   1          {
+  52   2               if(index%2) //奇数
+  53   2                  LCDWriteCmd(0xC5); //写地址 C0表示初始地址第二行
+  54   2              else
+C51 COMPILER V9.54   LCDSHOWMENU                                                           05/07/2023 23:09:25 PAGE 2   
+
+  55   2                  LCDWriteCmd(0x85);
+  56   2              LCDWriteData(' '); 
+  57   2              tmp = temp; //正数
+  58   2              temp = tmp*0.0625*100; //小数点后保留两位
+  59   2          }
+  60   1          if(temp >= 10000) //如果温度大于等于100°，5位数
+  61   1          {
+  62   2               if(index%2) //奇数
+  63   2                  LCDWriteCmd(0xC7); 
+  64   2              else
+  65   2                  LCDWriteCmd(0x87);
+  66   2              LCDWriteData('0'+temp/10000); //显示百位
+  67   2              LCDWriteData('0'+temp%10000/1000); //显示十位
+  68   2              LCDWriteData('0'+temp%1000/100); //显示个位
+  69   2              LCDWriteData('.'); //显示'.'
+  70   2              LCDWriteData('0'+temp%100/10); //显示小数点
+  71   2              LCDWriteData('0'+temp%10); //显示小数
+  72   2          }
+  73   1          else
+  74   1          {
+  75   2              if(temp >= 1000)  //温度大于等于10°
+  76   2              {
+  77   3                   if(index%2) //奇数
+  78   3                      LCDWriteCmd(0xC7); 
+  79   3                  else
+  80   3                      LCDWriteCmd(0x87);
+  81   3                  LCDWriteData('0'+temp%10000/1000); //显示十位
+  82   3                  LCDWriteData('0'+temp%1000/100); //显示个位
+  83   3                  LCDWriteData('.'); //显示'.'
+  84   3                  LCDWriteData('0'+temp%100/10); //显示小数点
+  85   3                  LCDWriteData('0'+temp%10); //显示小数
+  86   3                  LCDWriteData(' ');
+  87   3              }
+  88   2              else
+  89   2              {
+  90   3                   if(index%2) //奇数
+  91   3                      LCDWriteCmd(0xC7); 
+  92   3                  else
+  93   3                      LCDWriteCmd(0x87);
+  94   3                  LCDWriteData('0'+temp%1000/100); //显示个位
+  95   3                  LCDWriteData('.'); //显示'.'
+  96   3                  LCDWriteData('0'+temp%100/10); //显示小数点
+  97   3                  LCDWriteData('0'+temp%10); //显示小数
+  98   3                  LCDWriteData(' ');
+  99   3                  LCDWriteData(' ');
+ 100   3              }
+ 101   2          }
+ 102   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    683    ----
+   CONSTANT SIZE    =     55    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

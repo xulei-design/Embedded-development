@@ -1,0 +1,158 @@
+C51 COMPILER V9.54   I2C                                                                   06/26/2024 19:09:39 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\I2C.obj
+COMPILER INVOKED BY: E:\keil\keil5\keil5 install\C51\BIN\C51.EXE ..\source\I2C.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEX
+                    -TEND PRINT(.\Listings\I2C.lst) OBJECT(.\Objects\I2C.obj)
+
+line level    source
+
+   1          /******************
+   2          文件名：I2C.c
+   3          功能： 单片机IO口模拟I2C基本时序，I2C底层函数
+   4          版本：
+   5          修订时间：
+   6          ****************/
+   7          
+   8          #include "I2C.h"
+   9          bit I2CRecvAck();
+  10          
+  11          /**************************
+  12          函数名：I2CStart
+  13          功能：I2C启动信号
+  14          参数：无
+  15          返回值：无
+  16          ***************************/ 
+  17          void I2CStart() //启动总线函数
+  18          {
+  19   1          I2C_SCL = 1;  //总线空闲时 SCL SDA都为高电平
+  20   1          I2C_SDA = 1;
+  21   1          I2CDelay(); //SCL保持4.7个us之后，拉低SDA，产生起始信号
+  22   1          I2C_SDA = 0;
+  23   1          I2CDelay(); //SCL再维持4.7个us之后，拉低SCL，一个时钟周期结束
+  24   1          I2C_SCL = 0;
+  25   1      }
+  26          
+  27          
+  28          /********************
+  29          函数名：I2CWriteByte
+  30          功能：写一数据字节到总线上，并接受应答位
+  31          参数：待数据写入
+  32          返回值：读取应答位 0:应答， 1:非应答
+  33          *********************/
+  34          bit I2CWriteByte(unsigned char dat) //写一个字节的函数
+  35          {
+  36   1          unsigned char temp;
+  37   1          bit ack;
+  38   1          for(temp = 0x80; temp != 0; temp >>= 1) //从最高位开始写
+  39   1          {
+  40   2              if((temp & dat) == 0) //当前位为0
+  41   2                  I2C_SDA = 0;
+  42   2              else                  //当前位为 1
+  43   2                  I2C_SDA = 1;    
+  44   2              I2CDelay(); //延时至少4us 使得SCL保持低
+  45   2              I2C_SCL = 1; //拉高 器件读数据位
+  46   2              I2CDelay(); //延时至少4us 使得SCL保持高
+  47   2              I2C_SCL = 0; //拉低
+  48   2          }
+  49   1          ack = I2CRecvAck();
+  50   1          return ack;
+  51   1      }
+  52          /********************************
+  53          函数名: I2CRecvAck
+  54          功能： 主机读取从机应答位
+C51 COMPILER V9.54   I2C                                                                   06/26/2024 19:09:39 PAGE 2   
+
+  55          参数：无
+  56          返回值：读取应答位 0:应答  1：非应答
+  57          *********************************/
+  58          bit I2CRecvAck() //读应答信号
+  59          {
+  60   1          bit ack;
+  61   1          I2C_SDA = 1; //主机主动释放SDA，为读ACK做准备
+  62   1          I2CDelay();  //SCL保持4.7us低
+  63   1          I2C_SCL = 1;
+  64   1          ack = I2C_SDA;
+  65   1          I2CDelay();
+  66   1          I2C_SCL = 0; //拉低SCL
+  67   1          return (ack);
+  68   1          
+  69   1      }
+  70          
+  71          /********************************
+  72          函数名: I2CReadByte
+  73          功能: I2C读取总线上字节数据
+  74          参数: 无
+  75          返回值: 读取数据
+  76          ***********************************/
+  77          unsigned char I2CReadByte()
+  78          {
+  79   1          unsigned char dat = 0;
+  80   1          unsigned char temp;
+  81   1          I2C_SDA = 1;
+  82   1          for(temp = 0x80;temp != 0;temp >>= 1)
+  83   1          {
+  84   2              I2CDelay();
+  85   2              I2C_SCL = 1;
+  86   2              if(I2C_SDA == 1)
+  87   2              {
+  88   3                  dat |= temp;
+  89   3              }
+  90   2              else
+  91   2              {
+  92   3                  dat &= ~temp;
+  93   3              }
+  94   2              I2CDelay();
+  95   2              I2C_SCL = 0;
+  96   2          }
+  97   1          return dat;
+  98   1      }
+  99          /*****************************
+ 100          函数名：SendAck
+ 101          功能：注意发送应答/非应答
+ 102          参数：ack = 0: 应答 ,1：非应答
+ 103          返回值：无
+ 104          ******************************/
+ 105          void SendAck(unsigned int ack)
+ 106          {
+*** WARNING C235 IN LINE 106 OF ..\source\I2C.c: parameter 1: different types
+ 107   1          I2C_SDA = ack;
+ 108   1          I2CDelay();
+ 109   1          I2C_SCL = 1;
+ 110   1          I2CDelay();
+ 111   1          I2C_SCL = 0;   
+ 112   1      }
+ 113          
+ 114          /********************
+ 115          函数名:I2CStop
+C51 COMPILER V9.54   I2C                                                                   06/26/2024 19:09:39 PAGE 3   
+
+ 116          功能：I2C停止信号
+ 117          参数：无
+ 118          返回值：无
+ 119          *******************/
+ 120          void I2CStop()
+ 121          {
+ 122   1          I2C_SCL = 0;  
+ 123   1          I2C_SDA = 0;
+ 124   1          I2CDelay();
+ 125   1          I2C_SCL = 1;
+ 126   1          I2CDelay();
+ 127   1          I2C_SDA = 1;
+ 128   1          I2CDelay();
+ 129   1      }  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    157    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
